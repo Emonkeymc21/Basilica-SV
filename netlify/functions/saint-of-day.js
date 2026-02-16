@@ -5,52 +5,96 @@ const cheerio = require("cheerio");
 
 function clean(s=''){ return s.replace(/\s+/g,' ').trim(); }
 
-exports.handler = async ()=>{
-  const now = new Date();
-  const mm = String(now.getMonth()+1).padStart(2,'0');
-  const dd = String(now.getDate()).padStart(2,'0');
-  const url = `https://www.vaticannews.va/es/santos/${mm}/${dd}.html`;
+// netlify/functions/saint-of-day.js
+exports.handler = async () => {
+  try {
+    const now = new Date();
+    const mm = String(now.getMonth() + 1).padStart(2, "0");
+    const dd = String(now.getDate()).padStart(2, "0");
 
-  try{
-    const {data:html}= await axios.get(url,{timeout:12000, headers:{'User-Agent':'Mozilla/5.0','Accept-Language':'es-ES,es;q=0.9'}});
-    const $=cheerio.load(html);
+    // URL Vatican News por fecha
+    const url = `https://www.vaticannews.va/es/santos/${mm}/${dd}.html`;
 
-    // Título
-    let title = clean($('h1').first().text()) || clean($('.section__head-title').first().text()) || '';
-    if(!title) title = clean($('.article-title, .title').first().text());
-
-    // Intentar título específico del santo
-    const blocks=['.article-body','.article__content','.article-content','.section__content','main'];
-    let saintTitle='';
-    for(const b of blocks){
-      const t=clean($(b).find('h2,h3,strong').first().text());
-      if(t && t.length>6){ saintTitle=t; break;}
-    }
-    if(!saintTitle) saintTitle=title || `Santo del día (${dd}/${mm})`;
-
-    // Descripción
-    let description='';
-    for(const b of blocks){
-      const ps=$(b).find('p').map((i,el)=>clean($(el).text())).get().filter(Boolean);
-      if(ps.length){ description=ps.slice(0,2).join(' '); break;}
-    }
-
-    // Imagen
-    let image='';
-    const imgSel=['meta[property="og:image"]','main img','.article img','.article-body img'];
-    for(const s of imgSel){
-      let src='';
-      if(s.startsWith('meta')) src=$(s).attr('content')||'';
-      else src=$(s).first().attr('src')||'';
-      if(src){
-        if(src.startsWith('//')) src='https:'+src;
-        if(src.startsWith('/')) src='https://www.vaticannews.va'+src;
-        image=src; break;
+    const resp = await fetch(url, {
+      headers: {
+        "user-agent": "Mozilla/5.0 (compatible; BasilicaSV/1.0)"
       }
+    });
+
+    if (!resp.ok) {
+      return {
+        statusCode: 502,
+        headers: { "Content-Type": "application/json; charset=utf-8" },
+        body: JSON.stringify({
+          ok: false,
+          error: `No se pudo obtener Vatican News (${resp.status})`,
+          source: url
+        })
+      };
     }
 
-    return {statusCode:200, headers:{'Content-Type':'application/json; charset=utf-8','Cache-Control':'public, max-age=1800'}, body:JSON.stringify({ok:true,title:saintTitle,description,image,url,source:'vaticannews'})};
-  }catch(e){
-    return {statusCode:200, headers:{'Content-Type':'application/json; charset=utf-8'}, body:JSON.stringify({ok:false,title:`Santo del día (${dd}/${mm})`,description:'No pudimos obtener el contenido ahora. Tocá Actualizar en unos segundos.',image:'',url,source:'vaticannews',error:e.message})};
+    const html = await resp.text();
+
+    // Helpers simples para extraer meta tags
+    const getMeta = (propertyOrName) => {
+      const r1 = new RegExp(
+        `<meta[^>]+property=["']${propertyOrName}["'][^>]+content=["']([^"']+)["'][^>]*>`,
+        "i"
+      );
+      const r2 = new RegExp(
+        `<meta[^>]+content=["']([^"']+)["'][^>]+property=["']${propertyOrName}["'][^>]*>`,
+        "i"
+      );
+      const r3 = new RegExp(
+        `<meta[^>]+name=["']${propertyOrName}["'][^>]+content=["']([^"']+)["'][^>]*>`,
+        "i"
+      );
+      const r4 = new RegExp(
+        `<meta[^>]+content=["']([^"']+)["'][^>]+name=["']${propertyOrName}["'][^>]*>`,
+        "i"
+      );
+      return (
+        html.match(r1)?.[1] ||
+        html.match(r2)?.[1] ||
+        html.match(r3)?.[1] ||
+        html.match(r4)?.[1] ||
+        null
+      );
+    };
+
+    // Title (fallback al <title>)
+    const ogTitle = getMeta("og:title");
+    const titleTag = html.match(/<title[^>]*>(.*?)<\/title>/i)?.[1]?.trim() || null;
+    const title = ogTitle || titleTag || "Santo del día";
+
+    // Description
+    const ogDesc = getMeta("og:description");
+    const metaDesc = getMeta("description");
+    const description = ogDesc || metaDesc || "Sin descripción disponible.";
+
+    // Image
+    const image = getMeta("og:image") || null;
+
+    return {
+      statusCode: 200,
+      headers: { "Content-Type": "application/json; charset=utf-8" },
+      body: JSON.stringify({
+        ok: true,
+        source: url,
+        title,
+        description,
+        image,
+        link: url
+      })
+    };
+  } catch (err) {
+    return {
+      statusCode: 500,
+      headers: { "Content-Type": "application/json; charset=utf-8" },
+      body: JSON.stringify({
+        ok: false,
+        error: err.message || "Error interno al obtener santo del día"
+      })
+    };
   }
 };
