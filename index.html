@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="theme-color" content="#0b1b3a" />
+  <title>Parroquia</title>
+
+  <link rel="manifest" href="manifest.json" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='64' height='64'><text y='52' font-size='52'>⛪</text></svg>">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand__icon">⛪</div>
+      <div class="brand__text">
+        <div class="brand__title" id="parishName">Parroquia</div>
+        <div class="brand__subtitle">Cantos · Oraciones · Santos · Historia</div>
+      </div>
+    </div>
+    <button class="btn btn--ghost" id="btnInstall" hidden>Instalar</button>
+  </header>
+
+  <main class="container">
+    <!-- HOME -->
+    <section id="viewHome" class="view view--active">
+      <div class="grid">
+        <button class="card" data-nav="songs">
+          <div class="card__title">Cancionero</div>
+          <div class="card__desc">Buscar por título o letra</div>
+        </button>
+
+        <button class="card" data-nav="prayers">
+          <div class="card__title">Oraciones</div>
+          <div class="card__desc">Confesión y básicas</div>
+        </button>
+
+        <button class="card" data-nav="saints">
+          <div class="card__title">Santos</div>
+          <div class="card__desc">Santo del día</div>
+        </button>
+
+        <button class="card" data-nav="history">
+          <div class="card__title">Historia</div>
+          <div class="card__desc">Nuestra parroquia</div>
+        </button>
+
+        <button class="card" data-nav="schedule">
+          <div class="card__title">Horarios</div>
+          <div class="card__desc">Misas, confesión, contacto</div>
+        </button>
+      </div>
+
+      <div class="note">
+        Tip: poné un QR en el templo que apunte a esta página 🔥
+      </div>
+    </section>
+
+    <!-- SONGS LIST -->
+    <section id="viewSongs" class="view">
+      <div class="toolbar">
+        <button class="btn btn--ghost" data-back>←</button>
+        <div class="toolbar__title">Cancionero</div>
+      </div>
+
+      <div class="search">
+        <input id="songSearch" type="search" placeholder="Buscar por título o letra..." autocomplete="off" />
+      </div>
+
+      <div class="chips" id="categoryChips"></div>
+
+      <div class="list" id="songsList"></div>
+    </section>
+
+    <!-- SONG READER -->
+    <section id="viewSongReader" class="view">
+      <div class="toolbar">
+        <button class="btn btn--ghost" id="btnBackToSongs">←</button>
+        <div class="toolbar__title" id="songTitle">Canción</div>
+        <button class="btn btn--ghost" id="btnWake">Pantalla</button>
+      </div>
+
+      <div class="reader-controls">
+        <button class="btn" id="fontMinus">A-</button>
+        <button class="btn" id="fontPlus">A+</button>
+      </div>
+
+      <article class="reader" id="songLyrics"></article>
+    </section>
+
+    <!-- PRAYERS -->
+    <section id="viewPrayers" class="view">
+      <div class="toolbar">
+        <button class="btn btn--ghost" data-back>←</button>
+        <div class="toolbar__title">Oraciones</div>
+      </div>
+      <div class="list" id="prayersList"></div>
+    </section>
+
+    <!-- SAINTS -->
+    <section id="viewSaints" class="view">
+      <div class="toolbar">
+        <button class="btn btn--ghost" data-back>←</button>
+        <div class="toolbar__title">Santos</div>
+      </div>
+      <div class="panel" id="saintOfDay"></div>
+      <div class="list" id="saintsList"></div>
+    </section>
+
+    <!-- HISTORY -->
+    <section id="viewHistory" class="view">
+      <div class="toolbar">
+        <button class="btn btn--ghost" data-back>←</button>
+        <div class="toolbar__title">Historia</div>
+      </div>
+      <div class="panel" id="historyPanel"></div>
+    </section>
+
+    <!-- SCHEDULE -->
+    <section id="viewSchedule" class="view">
+      <div class="toolbar">
+        <button class="btn btn--ghost" data-back>←</button>
+        <div class="toolbar__title">Horarios</div>
+      </div>
+      <div class="panel" id="schedulePanel"></div>
+    </section>
+  </main>
+
+  <footer class="bottombar">
+    <button class="tab" data-nav="home">Inicio</button>
+    <button class="tab" data-nav="songs">Cantos</button>
+    <button class="tab" data-nav="prayers">Oraciones</button>
+    <button class="tab" data-nav="schedule">Horarios</button>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
