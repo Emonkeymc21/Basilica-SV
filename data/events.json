@@ -16,5 +16,69 @@
     "title": "Solemnidad de Cristo Rey",
     "time": "",
     "place": ""
+  },
+  {
+    "title": "Semana Santa · Domingo de Ramos",
+    "start": "2026-03-29T00:00:00-03:00",
+    "end": "2026-03-29T23:59:00-03:00",
+    "location": "Basílica San Vicente Ferrer",
+    "category": "semana_santa_2026",
+    "details": "Horario a confirmar"
+  },
+  {
+    "title": "Semana Santa · Lunes Santo",
+    "start": "2026-03-30T00:00:00-03:00",
+    "end": "2026-03-30T23:59:00-03:00",
+    "location": "Basílica San Vicente Ferrer",
+    "category": "semana_santa_2026",
+    "details": "Horario a confirmar"
+  },
+  {
+    "title": "Semana Santa · Martes Santo",
+    "start": "2026-03-31T00:00:00-03:00",
+    "end": "2026-03-31T23:59:00-03:00",
+    "location": "Basílica San Vicente Ferrer",
+    "category": "semana_santa_2026",
+    "details": "Horario a confirmar"
+  },
+  {
+    "title": "Semana Santa · Miércoles Santo",
+    "start": "2026-04-01T00:00:00-03:00",
+    "end": "2026-04-01T23:59:00-03:00",
+    "location": "Basílica San Vicente Ferrer",
+    "category": "semana_santa_2026",
+    "details": "Horario a confirmar"
+  },
+  {
+    "title": "Semana Santa · Jueves Santo",
+    "start": "2026-04-02T00:00:00-03:00",
+    "end": "2026-04-02T23:59:00-03:00",
+    "location": "Basílica San Vicente Ferrer",
+    "category": "semana_santa_2026",
+    "details": "Horario a confirmar"
+  },
+  {
+    "title": "Semana Santa · Viernes Santo",
+    "start": "2026-04-03T00:00:00-03:00",
+    "end": "2026-04-03T23:59:00-03:00",
+    "location": "Basílica San Vicente Ferrer",
+    "category": "semana_santa_2026",
+    "details": "Horario a confirmar"
+  },
+  {
+    "title": "Semana Santa · Sábado de Gloria",
+    "start": "2026-04-04T00:00:00-03:00",
+    "end": "2026-04-04T23:59:00-03:00",
+    "location": "Basílica San Vicente Ferrer",
+    "category": "semana_santa_2026",
+    "details": "Horario a confirmar"
+  },
+  {
+    "title": "Semana Santa · Domingo de Pascua",
+    "start": "2026-04-05T00:00:00-03:00",
+    "end": "2026-04-05T23:59:00-03:00",
+    "location": "Basílica San Vicente Ferrer",
+    "category": "semana_santa_2026",
+    "details": "Horario a confirmar"
   }
 ]

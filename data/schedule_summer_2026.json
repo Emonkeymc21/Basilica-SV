@@ -1,26 +1,42 @@
 {
-  "title": "Horarios de Verano 2026 (hasta Semana Santa)",
-  "note": "⚠️ Esta sección está lista para completar con los horarios de verano. Cuando me pases los datos, los cargo acá y también los reflejo en el calendario.",
+  "title": "Horarios Primavera / Verano (vigentes hasta Semana Santa 2026)",
   "items": [
     {
-      "label": "Vigencia",
-      "value": "(pendiente) — hasta Semana Santa 2026"
+      "label": "Misas · Lunes a viernes",
+      "value": "08:00 hs"
     },
     {
-      "label": "Misas",
-      "value": "(pendiente)"
+      "label": "Misas · Martes a viernes",
+      "value": "20:00 hs"
     },
     {
-      "label": "Confesiones",
-      "value": "(pendiente)"
+      "label": "Misas · Sábados",
+      "value": "20:00 hs"
     },
     {
-      "label": "Adoración Eucarística",
-      "value": "(pendiente)"
+      "label": "Misas · Domingos",
+      "value": "11:00 y 20:00 hs"
     },
     {
-      "label": "Secretaría",
-      "value": "(pendiente)"
+      "label": "Confesiones · Martes",
+      "value": "18:00 a 20:00 hs"
+    },
+    {
+      "label": "Confesiones · Viernes",
+      "value": "09:00 a 12:00 hs y 17:00 a 20:00 hs"
+    },
+    {
+      "label": "Adoración Eucarística · Jueves",
+      "value": "18:00 a 19:30 hs"
+    },
+    {
+      "label": "Adoración Eucarística · Viernes",
+      "value": "08:30 a 10:00 hs"
+    },
+    {
+      "label": "Secretaría · Martes a viernes",
+      "value": "09:00 a 12:00 hs y 17:00 a 20:00 hs"
     }
-  ]
+  ],
+  "note": "Semana Santa 2026: desde el domingo 29/03 hasta el domingo 05/04. Los horarios de celebraciones propias de Semana Santa se publican en Novedades."
 }
