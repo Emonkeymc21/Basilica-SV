@@ -8,6 +8,8 @@ const VIEWS = {
   saints: "viewSaints",
   history: "viewHistory",
   schedule: "viewSchedule",
+  today: "viewToday",
+  calendar: "viewCalendar",
 };
 
 let state = {
@@ -17,6 +19,8 @@ let state = {
   history: null,
   schedule: null,
   announcements: [],
+  events: [],
+  today: null,
   category: "Todas",
   query: "",
   fontSize: 18,
@@ -57,6 +61,149 @@ function escapeHTML(str){
   return (str || "").replace(/[&<>"']/g, m => ({
     "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"
   }[m]));
+}
+
+
+
+/* -------------------- Utilidades de fecha -------------------- */
+function pad2(n){ return String(n).padStart(2,"0"); }
+function formatDateAR(date){
+  // date: Date
+  const d = pad2(date.getDate());
+  const m = pad2(date.getMonth()+1);
+  const y = date.getFullYear();
+  return `${d}/${m}/${y}`;
+}
+function formatTimeAR(date){
+  return `${pad2(date.getHours())}:${pad2(date.getMinutes())}`;
+}
+function parseISO(iso){
+  try { return new Date(iso); } catch { return null; }
+}
+
+/* -------------------- Hoy (Santo del día) -------------------- */
+async function fetchSaintOfDay(){
+  try{
+    const res = await fetch("/.netlify/functions/saint-of-day", { cache: "no-store" });
+    if(!res.ok) throw new Error("bad");
+    return res.json();
+  }catch(e){
+    // fallback: link a un sitio confiable si la función no está disponible
+    return {
+      title: "Santo del día",
+      url: "https://www.vaticannews.va/es.html",
+      source: "fallback"
+    };
+  }
+}
+
+async function renderToday(){
+  const now = new Date();
+  const dateLabel = now.toLocaleDateString("es-AR", { weekday:"long", year:"numeric", month:"long", day:"numeric" });
+  $("#todayDate").textContent = dateLabel.charAt(0).toUpperCase() + dateLabel.slice(1);
+
+  $("#todaySaintTitle").textContent = "Cargando…";
+  $("#todaySaintHint").textContent = "";
+
+  const data = await fetchSaintOfDay();
+  state.today = data;
+
+  $("#todaySaintTitle").textContent = data.title || "Santo del día";
+  const link = $("#todaySaintLink");
+  link.href = data.url || "#";
+
+  const hint = data.source === "fallback"
+    ? "No pude leer el santo automático ahora. Te dejo un enlace confiable."
+    : (data.source ? `Fuente: ${data.source}` : "");
+  $("#todaySaintHint").textContent = hint;
+}
+
+/* -------------------- Calendario -------------------- */
+let calCursor = new Date();
+
+function sameMonth(a,b){ return a.getFullYear()===b.getFullYear() && a.getMonth()===b.getMonth(); }
+
+function eventBadgeColor(ev){
+  const c = (ev.category||"").toLowerCase();
+  return c.includes("formacion") ? "dot--gold" : "";
+}
+
+function renderCalendarAgenda(){
+  const host = $("#calendarAgenda");
+  const monthStart = new Date(calCursor.getFullYear(), calCursor.getMonth(), 1);
+  const monthEnd = new Date(calCursor.getFullYear(), calCursor.getMonth()+1, 0, 23,59,59);
+
+  const items = (state.events || [])
+    .map(ev => ({...ev, _start: parseISO(ev.start), _end: parseISO(ev.end)}))
+    .filter(ev => ev._start && ev._start >= monthStart && ev._start <= monthEnd)
+    .sort((a,b)=> a._start - b._start);
+
+  if(!items.length){
+    host.innerHTML = '<div class="note">No hay actividades cargadas para este mes.</div>';
+    return;
+  }
+
+  host.innerHTML = "";
+  for(const ev of items){
+    const el = document.createElement("div");
+    el.className = "calendar__event";
+    const day = formatDateAR(ev._start);
+    const t1 = formatTimeAR(ev._start);
+    const t2 = ev._end ? formatTimeAR(ev._end) : "";
+    el.innerHTML = `
+      <div class="calendar__eventTitle">${escapeHTML(ev.title || "Actividad")}</div>
+      <div class="calendar__eventMeta">${escapeHTML(day)} · ${escapeHTML(t1)}${t2 ? "–"+escapeHTML(t2) : ""}${ev.location ? " · " + escapeHTML(ev.location) : ""}</div>
+      ${ev.details ? `<div class="calendar__eventDetails">${escapeHTML(ev.details)}</div>` : ""}
+    `;
+    host.appendChild(el);
+  }
+}
+
+function renderCalendarMonth(){
+  const host = $("#calendarMonth");
+  host.innerHTML = "";
+
+  const first = new Date(calCursor.getFullYear(), calCursor.getMonth(), 1);
+  const startDow = (first.getDay() + 6) % 7; // lunes=0
+  const daysInMonth = new Date(calCursor.getFullYear(), calCursor.getMonth()+1, 0).getDate();
+
+  // padding
+  for(let i=0;i<startDow;i++){
+    const pad = document.createElement("div");
+    pad.className = "daycell";
+    pad.style.opacity = "0";
+    host.appendChild(pad);
+  }
+
+  const byDay = {};
+  (state.events||[]).forEach(ev=>{
+    const d = parseISO(ev.start);
+    if(!d) return;
+    if(d.getFullYear()===calCursor.getFullYear() && d.getMonth()===calCursor.getMonth()){
+      const k = d.getDate();
+      byDay[k] = byDay[k] || [];
+      byDay[k].push(ev);
+    }
+  });
+
+  for(let day=1; day<=daysInMonth; day++){
+    const cell = document.createElement("div");
+    cell.className = "daycell";
+    const dots = (byDay[day]||[]).slice(0,4).map(ev => `<span class="dot ${eventBadgeColor(ev)}"></span>`).join("");
+    cell.innerHTML = `<div class="daycell__n">${day}</div><div class="daycell__dots">${dots}</div>`;
+    host.appendChild(cell);
+  }
+}
+
+function updateCalendarHeader(){
+  const label = calCursor.toLocaleDateString("es-AR", { month:"long", year:"numeric" });
+  $("#calMonthLabel").textContent = label.charAt(0).toUpperCase() + label.slice(1);
+}
+
+function renderCalendar(){
+  updateCalendarHeader();
+  renderCalendarAgenda();
+  renderCalendarMonth();
 }
 
 /* -------------------- Cancionero -------------------- */
@@ -280,6 +427,7 @@ async function init(){
   state.history = await loadJSON("data/history.json");
   state.schedule = await loadJSON("data/schedule.json");
   state.announcements = await loadJSON("data/announcements.json");
+  state.events = await loadJSON("data/events.json");
 
   renderCategoryChips();
   renderSongsList();
@@ -288,6 +436,8 @@ async function init(){
   renderHistory();
   renderSchedule();
   renderAnnouncements();
+  renderToday();
+  renderCalendar();
 
   // Navegación general
   $all("[data-nav]").forEach(btn => {
@@ -320,6 +470,25 @@ async function init(){
   });
 
   $("#btnWake").addEventListener("click", toggleWakeLock);
+
+  // Hoy
+  $("#btnReloadToday").addEventListener("click", renderToday);
+
+  // Calendario
+  $("#calPrev").addEventListener("click", () => { calCursor = new Date(calCursor.getFullYear(), calCursor.getMonth()-1, 1); renderCalendar(); });
+  $("#calNext").addEventListener("click", () => { calCursor = new Date(calCursor.getFullYear(), calCursor.getMonth()+1, 1); renderCalendar(); });
+  $("#btnAgenda").addEventListener("click", () => {
+    $("#btnAgenda").classList.add("chip--active");
+    $("#btnMonth").classList.remove("chip--active");
+    $("#calendarAgenda").hidden = false;
+    $("#calendarMonth").hidden = true;
+  });
+  $("#btnMonth").addEventListener("click", () => {
+    $("#btnMonth").classList.add("chip--active");
+    $("#btnAgenda").classList.remove("chip--active");
+    $("#calendarAgenda").hidden = true;
+    $("#calendarMonth").hidden = false;
+  });
 }
 
 init().catch(err => {

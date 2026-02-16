@@ -311,3 +311,66 @@ body{
 @media (max-width:420px){
   .grid{grid-template-columns: 1fr}
 }
+
+
+/* -------------------- Hoy -------------------- */
+.today{display:flex; flex-direction:column; gap:12px}
+.today__date{font-weight:900; color:var(--muted); margin:2px 2px 6px}
+.today__card{
+  border:1px solid var(--border);
+  background: rgba(255,255,255,.92);
+  border-radius: var(--radius);
+  padding:14px;
+  box-shadow: var(--shadow);
+}
+.today__label{font-size:12px; font-weight:900; letter-spacing:.2px; color:var(--muted)}
+.today__title{margin-top:6px; font-size:18px; font-weight:900}
+.today__actions{display:flex; gap:10px; align-items:center; margin-top:10px; flex-wrap:wrap}
+.today__hint{margin-top:10px; font-size:12px; color:var(--muted)}
+.today__text{margin-top:8px; font-size:16px; line-height:1.35}
+
+/* -------------------- Calendario -------------------- */
+.calendar{display:flex; flex-direction:column; gap:12px}
+.calendar__head{
+  display:flex; align-items:center; justify-content:space-between;
+  border:1px solid var(--border);
+  background: rgba(255,255,255,.92);
+  border-radius: var(--radius);
+  padding:10px;
+  box-shadow: var(--shadow);
+}
+.calendar__month{font-weight:900}
+.calendar__toggle{display:flex; gap:10px; flex-wrap:wrap}
+.calendar__event{
+  border:1px solid var(--border);
+  background: rgba(255,255,255,.92);
+  border-radius: var(--radius);
+  padding:12px;
+  box-shadow: var(--shadow);
+  margin-bottom:10px;
+}
+.calendar__eventTitle{font-weight:900}
+.calendar__eventMeta{font-size:12px; color:var(--muted); margin-top:4px}
+.calendar__eventDetails{margin-top:8px; font-size:14px; color:var(--text); white-space:pre-wrap}
+
+.calendar__monthgrid{
+  display:grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap:8px;
+}
+.daycell{
+  border:1px solid var(--border);
+  background: rgba(255,255,255,.92);
+  border-radius: 14px;
+  padding:10px 8px;
+  min-height:56px;
+  box-shadow: var(--shadow);
+}
+.daycell__n{font-weight:900; font-size:12px}
+.daycell__dots{margin-top:6px; display:flex; gap:4px; flex-wrap:wrap}
+.dot{width:8px;height:8px;border-radius:999px;background:rgba(30,99,182,.85)}
+.dot--gold{background:rgba(214,178,94,.95)}
+
+@media (max-width: 380px){
+  .tab{font-size:11px; padding:10px 6px; margin:0 4px}
+}

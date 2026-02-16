@@ -1,4 +1,4 @@
-const CACHE = "san-vicente-v2";
+const CACHE = "san-vicente-v3";
 const ASSETS = [
   "./",
   "./index.html",
@@ -12,12 +12,20 @@ const ASSETS = [
   "./data/history.json",
   "./data/schedule.json",
   "./data/announcements.json",
+  "./data/events.json",
 
   "./assets/img/logo.png",
   "./assets/img/curso-canto-gregoriano.png",
   "./assets/img/catequesis-familiar.png",
   "./assets/img/misa-enfermos.png",
   "./assets/img/horarios-primavera-verano.png",
+  "./assets/img/solo-por-hoy-cover.jpg",
+  "./assets/img/solo-por-hoy-3.jpg",
+  "./assets/img/solo-por-hoy-2.jpg",
+  "./assets/img/solo-por-hoy-1.jpg",
+  "./assets/img/flyer-cristo-rey.jpg",
+  "./assets/img/flyer-nuestra-senora-salud.jpg",
+  "./assets/img/flyer-dedicacion-san-juan-letran.jpg",
 ];
 
 self.addEventListener("install", (event) => {

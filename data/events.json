@@ -1,0 +1,56 @@
+[
+  {
+    "id": "canto-2026-02-21",
+    "title": "Curso de Canto Gregoriano",
+    "start": "2026-02-21T17:30:00-03:00",
+    "end": "2026-02-21T19:00:00-03:00",
+    "location": "Basílica San Vicente Ferrer",
+    "category": "formacion",
+    "details": "Nivel inicial. Prof. Mario Masera."
+  },
+  {
+    "id": "canto-2026-02-28",
+    "title": "Curso de Canto Gregoriano",
+    "start": "2026-02-28T17:30:00-03:00",
+    "end": "2026-02-28T19:00:00-03:00",
+    "location": "Basílica San Vicente Ferrer",
+    "category": "formacion",
+    "details": "Nivel inicial. Prof. Mario Masera."
+  },
+  {
+    "id": "canto-2026-03-07",
+    "title": "Curso de Canto Gregoriano",
+    "start": "2026-03-07T17:30:00-03:00",
+    "end": "2026-03-07T19:00:00-03:00",
+    "location": "Basílica San Vicente Ferrer",
+    "category": "formacion",
+    "details": "Nivel inicial. Prof. Mario Masera."
+  },
+  {
+    "id": "canto-2026-03-14",
+    "title": "Curso de Canto Gregoriano",
+    "start": "2026-03-14T17:30:00-03:00",
+    "end": "2026-03-14T19:00:00-03:00",
+    "location": "Basílica San Vicente Ferrer",
+    "category": "formacion",
+    "details": "Nivel inicial. Prof. Mario Masera."
+  },
+  {
+    "id": "canto-2026-03-21",
+    "title": "Curso de Canto Gregoriano",
+    "start": "2026-03-21T17:30:00-03:00",
+    "end": "2026-03-21T19:00:00-03:00",
+    "location": "Basílica San Vicente Ferrer",
+    "category": "formacion",
+    "details": "Nivel inicial. Prof. Mario Masera."
+  },
+  {
+    "id": "misa-enfermos",
+    "title": "Misa por los enfermos",
+    "start": "2026-03-13T20:00:00-03:00",
+    "end": "2026-03-13T21:00:00-03:00",
+    "location": "Basílica San Vicente Ferrer",
+    "category": "celebracion",
+    "details": "2º viernes del mes. Rosario 19:00."
+  }
+]
