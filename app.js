@@ -52,6 +52,19 @@ async function loadSaintOfDay(){
 
   try{
     const res = await fetch('/.netlify/functions/saint-of-day', { cache: 'no-store' });
+    if(!res.ok){
+      // fallback via public mirror of Vatican News page when local function is not deployed
+      const r2 = await fetch('https://r.jina.ai/http://www.vaticannews.va/es/santos.html', {cache:'no-store'});
+      if(!r2.ok) throw new Error('fallback not ok');
+      const t = await r2.text();
+      const m = t.match(/Santo del día[^\n]{0,120}\n+([^\n]+)/i) || t.match(/Santos del día[^\n]{0,120}\n+([^\n]+)/i);
+      const name = (m?.[1]||'Santo del día').trim();
+      nameEl.textContent = name;
+      linkEl.href = 'https://www.vaticannews.va/es/santos.html';
+      imgEl.src = 'https://images.unsplash.com/photo-1548625149-fc4a29cf7092?q=80&w=1200&auto=format&fit=crop';
+      imgEl.alt = name;
+      return;
+    }
     if(!res.ok) throw new Error('saint-of-day not ok');
     const data = await res.json();
     nameEl.textContent = data.title || "Santo del día";
@@ -429,7 +442,7 @@ async function fetchSaintMeta(vaticanUrl){
 }
 
 async 
-async function updateSaintOfDay(){
+async async function updateSaintOfDay(){
   const nameEl = document.getElementById("saintOfDayName");
   const imgEl  = document.getElementById("saintOfDayImg");
   const linkEl = document.getElementById("saintOfDayLink");
@@ -440,6 +453,19 @@ async function updateSaintOfDay(){
 
   try{
     const res = await fetch('/.netlify/functions/saint-of-day', { cache: 'no-store' });
+    if(!res.ok){
+      // fallback via public mirror of Vatican News page when local function is not deployed
+      const r2 = await fetch('https://r.jina.ai/http://www.vaticannews.va/es/santos.html', {cache:'no-store'});
+      if(!r2.ok) throw new Error('fallback not ok');
+      const t = await r2.text();
+      const m = t.match(/Santo del día[^\n]{0,120}\n+([^\n]+)/i) || t.match(/Santos del día[^\n]{0,120}\n+([^\n]+)/i);
+      const name = (m?.[1]||'Santo del día').trim();
+      nameEl.textContent = name;
+      linkEl.href = 'https://www.vaticannews.va/es/santos.html';
+      imgEl.src = 'https://images.unsplash.com/photo-1548625149-fc4a29cf7092?q=80&w=1200&auto=format&fit=crop';
+      imgEl.alt = name;
+      return;
+    }
     if(!res.ok) throw new Error('saint-of-day not ok');
     const data = await res.json();
     nameEl.textContent = data.title || "Santo del día";
@@ -783,7 +809,7 @@ function renderCalendar(){
   if(todayNext) todayNext.innerHTML = line || 'Sin eventos próximos.';
 }
 
-async function updateSaintOfDay(){
+async async function updateSaintOfDay(){
   const titleEls = [_$('saintTitle'), _$('saintTitle2')].filter(Boolean);
   const bioEls = [_$('saintBio'), _$('saintBio2')].filter(Boolean);
   const linkEls = [_$('saintLink'), _$('saintLink2'), _$('homeSaintLink')].filter(Boolean);

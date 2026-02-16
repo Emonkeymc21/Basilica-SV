@@ -485,3 +485,5 @@ body{
   display:none;
 }
 .scrolltop--show{display:block;}
+
+.bottom-nav{display:none!important}
