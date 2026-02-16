@@ -1,23 +1,5 @@
 [
   {
-    "date": "2026-11-09",
-    "title": "Dedicación a la Basílica San Juan de Letrán",
-    "time": "",
-    "place": ""
-  },
-  {
-    "date": "2026-11-21",
-    "title": "Nuestra Señora de la Salud",
-    "time": "",
-    "place": ""
-  },
-  {
-    "date": "2026-11-23",
-    "title": "Solemnidad de Cristo Rey",
-    "time": "",
-    "place": ""
-  },
-  {
     "title": "Semana Santa · Domingo de Ramos",
     "start": "2026-03-29T00:00:00-03:00",
     "end": "2026-03-29T23:59:00-03:00",
@@ -80,5 +62,65 @@
     "location": "Basílica San Vicente Ferrer",
     "category": "semana_santa_2026",
     "details": "Horario a confirmar"
+  },
+  {
+    "date": "2026-03-29",
+    "title": "Domingo de Ramos",
+    "time": "11:00",
+    "type": "misa"
+  },
+  {
+    "date": "2026-03-29",
+    "title": "Domingo de Ramos",
+    "time": "20:00",
+    "type": "misa"
+  },
+  {
+    "date": "2026-04-02",
+    "title": "Jueves Santo",
+    "time": "20:00",
+    "type": "especial"
+  },
+  {
+    "date": "2026-04-03",
+    "title": "Viernes Santo (Celebración de la Pasión)",
+    "time": "20:00",
+    "type": "especial"
+  },
+  {
+    "date": "2026-04-04",
+    "title": "Sábado de Gloria (Vigilia Pascual)",
+    "time": "20:00",
+    "type": "especial"
+  },
+  {
+    "date": "2026-04-05",
+    "title": "Domingo de Pascua",
+    "time": "11:00",
+    "type": "misa"
+  },
+  {
+    "date": "2026-04-05",
+    "title": "Domingo de Pascua",
+    "time": "20:00",
+    "type": "misa"
+  },
+  {
+    "date": "2026-11-09",
+    "title": "Dedicación a la Basílica San Juan de Letrán",
+    "time": "",
+    "place": ""
+  },
+  {
+    "date": "2026-11-21",
+    "title": "Nuestra Señora de la Salud",
+    "time": "",
+    "place": ""
+  },
+  {
+    "date": "2026-11-23",
+    "title": "Solemnidad de Cristo Rey",
+    "time": "",
+    "place": ""
   }
 ]

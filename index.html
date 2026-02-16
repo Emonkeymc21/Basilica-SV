@@ -73,42 +73,57 @@
   </section>
 
   <!-- HOY -->
-  <section class="view" id="viewToday">
-    <div class="toolbar">
-      <h2>Hoy</h2>
-      <span class="muted" id="todayDate"></span>
-    </div>
+  <section id="viewToday" class="view">
+      <div class="toolbar">
+        <button class="btn btn--ghost" data-back="home">←</button>
+        <div class="toolbar__title">Hoy</div>
+      </div>
 
-    <section class="grid2">
-      <article class="card">
-        <div class="card__title" id="saintTitle">Santo del día</div>
-        <div class="card__text" id="saintBio">Cargando…</div>
-        <div class="card__media" id="saintImageWrap" hidden>
-          <img id="saintImage" alt="Imagen del santo del día" loading="lazy"/>
+      <div class="today">
+        <div class="today__date" id="todayDate"></div>
+
+        <div class="today__card">
+          <div class="today__label">Santo del día</div>
+          <div class="today__title" id="todaySaintTitle">Cargando…</div>
+          <div class="today__actions">
+            <a class="btn btn--primary" id="todaySaintLink" href="#" target="_blank" rel="noopener">Ver</a>
+            <button class="btn" id="btnReloadToday">Actualizar</button>
+          </div>
+          <div class="today__hint" id="todaySaintHint"></div>
         </div>
-        <a class="card__link" id="saintLink" target="_blank" rel="noopener">Abrir biografía</a>
-      </article>
 
-      <article class="card">
-        <div class="card__title">Próximos horarios</div>
-        <div class="card__text" id="todayNextEvents">Cargando…</div>
-        <a class="card__link" href="#calendar" data-nav="calendar">Ver calendario</a>
-      </article>
+        <div class="today__card">
+          <div class="today__label">Sólo por hoy…</div>
+          <div class="today__text" id="todayReflection">
+            Un paso simple: elegí una cosa buena para hacer hoy 🙌
+          </div>
+        </div>
+      </div>
     </section>
   </section>
 
   <!-- CALENDARIO -->
-  <section class="view" id="viewCalendar">
-    <div class="toolbar">
-      <h2>Calendario</h2>
-      <div class="toolbar__right">
-        <input type="date" id="calendarDatePicker" class="datepick" />
+  <section id="viewCalendar" class="view">
+      <div class="toolbar">
+        <button class="btn btn--ghost" data-back="home">←</button>
+        <div class="toolbar__title">Calendario</div>
       </div>
-    </div>
 
-    <section class="panel">
-      <h3 class="panel__subtitle">Eventos del día</h3>
-      <div id="calendarDayEvents" class="list"></div>
+      <div class="calendar">
+        <div class="calendar__head">
+          <button class="btn btn--ghost" id="calPrev">◀</button>
+          <div class="calendar__month" id="calMonthLabel"></div>
+          <button class="btn btn--ghost" id="calNext">▶</button>
+        </div>
+
+        <div class="calendar__toggle">
+          <button class="chip chip--active" id="btnAgenda">Agenda</button>
+          <button class="chip" id="btnMonth">Mes</button>
+        </div>
+
+        <div id="calendarAgenda"></div>
+        <div id="calendarMonth" class="calendar__monthgrid" hidden></div>
+      </div>
     </section>
 
     <section class="panel">
@@ -257,7 +272,30 @@
     <div id="saintsList" class="list"></div>
   </section>
 
-  <!-- HISTORIA -->
+  <!-- HISTORIA --><section class="view" id="viewLocation" data-route="location">
+      <div class="view__header">
+        <h2>Ubicación</h2>
+        <p>Basílica San Vicente Ferrer · Godoy Cruz, Mendoza</p>
+      </div>
+
+      <div class="card">
+        <div class="card__title">Cómo llegar</div>
+        <div class="card__body">
+          <iframe
+            title="Mapa Basílica San Vicente Ferrer"
+            class="map__frame"
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"
+            src="https://www.google.com/maps?q=Bas%C3%ADlica%20San%20Vicente%20Ferrer%20Godoy%20Cruz%20Mendoza&output=embed">
+          </iframe>
+          <div class="map__links">
+            <a class="link" target="_blank" rel="noopener" href="https://www.google.com/maps?q=Bas%C3%ADlica%20San%20Vicente%20Ferrer%20Godoy%20Cruz%20Mendoza">Abrir en Google Maps</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
   <section class="view" id="viewHistory">
     <div class="toolbar">
       <h2>Historia</h2>
@@ -269,13 +307,7 @@
 
 <button class="scrolltop" id="scrollTopBtn" aria-label="Subir">↑</button>
 
-  <footer class="bottombar">
-    <button class="tab" data-nav="home">Inicio</button>
-    <button class="tab" data-nav="songs">Cantos</button>
-    <button class="tab" data-nav="announcements">Novedades</button>
-    <button class="tab" data-nav="schedule">Horarios</button>
-  </footer>
-
   <script src="app.js"></script>
+  <button id="btnScrollTop" class="scrolltop" title="Subir">↑</button>
 </body>
 </html>

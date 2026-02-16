@@ -1,65 +1,62 @@
-// Netlify Function: santo del día (simple)
-// Fuente principal: Vatican News (puede cambiar el HTML, por eso hay fallback).
-// Devuelve: { title, url, source }
+export async function handler(event, context) {
+  try {
+    // Use Argentina time (UTC-3)
+    const now = new Date(new Date().toLocaleString("en-US", { timeZone: "America/Argentina/Buenos_Aires" }));
+    const mm = String(now.getMonth() + 1).padStart(2, "0");
+    const dd = String(now.getDate()).padStart(2, "0");
 
-function pickFirstMatch(text, patterns){
-  for(const p of patterns){
-    const m = text.match(p);
-    if(m && m[1]) return m[1].trim();
-  }
-  return null;
-}
+    const pageUrl = `https://www.vaticannews.va/es/santos/${mm}/${dd}.html`;
 
-exports.handler = async function(event, context){
-  try{
-    const target = "https://www.vaticannews.va/es/santos.html";
-    const res = await fetch(target, {
+    // Fetch HTML (server-side: no CORS issues)
+    const res = await fetch(pageUrl, {
       headers: {
-        "user-agent": "SanVicenteWebApp/1.0 (+https://example.invalid)"
+        "user-agent": "Mozilla/5.0 (compatible; BasilicaSanVicenteBot/1.0; +https://example.com)"
       }
     });
+    if (!res.ok) {
+      throw new Error(`VaticanNews status ${res.status}`);
+    }
     const html = await res.text();
 
-    // Intentamos detectar el primer título de santo (HTML puede variar).
-    // Ojo: esto es heurístico.
-    const title = pickFirstMatch(html, [
-      /<h3[^>]*class="[^"]*title[^"]*"[^>]*>\s*<a[^>]*>([^<]+)<\/a>/i,
-      /<a[^>]*class="[^"]*title[^"]*"[^>]*>([^<]+)<\/a>/i,
-      /<h3[^>]*>\s*<a[^>]*>([^<]+)<\/a>\s*<\/h3>/i
-    ]);
+    // Try to get OpenGraph image (usually present)
+    const ogImgMatch = html.match(/property=["']og:image["'][^>]*content=["']([^"']+)["']/i);
+    const image = ogImgMatch ? ogImgMatch[1] : null;
 
-    // Detectamos el primer link (relativo) dentro del bloque de santos
-    const rel = pickFirstMatch(html, [
-      /<h3[^>]*class="[^"]*title[^"]*"[^>]*>\s*<a[^>]*href="([^"]+)"/i,
-      /<a[^>]*class="[^"]*title[^"]*"[^>]*href="([^"]+)"/i,
-      /<h3[^>]*>\s*<a[^>]*href="([^"]+)"/i
-    ]);
+    // First h2 usually contains the main saint name on that day page
+    // e.g. <h2 ...>s. Hilario ...</h2>
+    const h2Match = html.match(/<h2[^>]*>(.*?)<\/h2>/is);
+    const rawTitle = h2Match ? h2Match[1] : "Santo del día";
+    const title = rawTitle
+      .replace(/<[^>]+>/g, " ")
+      .replace(/\s+/g, " ")
+      .trim();
 
-    const url = rel
-      ? (rel.startsWith("http") ? rel : ("https://www.vaticannews.va" + rel))
-      : target;
+    // "Leer todo..." link for the first saint (if present)
+    const leerTodoMatch = html.match(/href=["']([^"']+)["'][^>]*>\s*Leer todo\.\.\.\s*<\/a>/i);
+    let url = pageUrl;
+    if (leerTodoMatch && leerTodoMatch[1]) {
+      const href = leerTodoMatch[1].startsWith("http") ? leerTodoMatch[1] : `https://www.vaticannews.va${leerTodoMatch[1]}`;
+      url = href;
+    }
 
     return {
       statusCode: 200,
       headers: {
         "content-type": "application/json; charset=utf-8",
-        "cache-control": "public, max-age=900" // 15 min
+        "cache-control": "public, max-age=3600"
       },
-      body: JSON.stringify({
-        title: title || "Santo del día",
-        url,
-        source: "Vatican News"
-      })
+      body: JSON.stringify({ title, image, url, source: "vaticannews" })
     };
-  }catch(err){
+  } catch (err) {
     return {
       statusCode: 200,
       headers: { "content-type": "application/json; charset=utf-8" },
       body: JSON.stringify({
         title: "Santo del día",
-        url: "https://www.vaticannews.va/es.html",
+        image: null,
+        url: "https://www.vaticannews.va/es/santos.html",
         source: "fallback"
       })
     };
   }
-};
+}

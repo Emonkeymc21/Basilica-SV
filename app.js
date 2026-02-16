@@ -39,6 +39,37 @@ function showView(key){
   document.getElementById(id).classList.add("view--active");
 }
 
+
+async function loadSaintOfDay(){
+  const nameEl = document.getElementById('todaySaintName');
+  const imgEl  = document.getElementById('todaySaintImg');
+  const linkEl = document.getElementById('todaySaintLink');
+  if(!nameEl || !imgEl || !linkEl) return;
+
+  nameEl.textContent = "Cargando…";
+  linkEl.href = "https://www.vaticannews.va/es/santos.html";
+  imgEl.src = "";
+
+  try{
+    const res = await fetch('/.netlify/functions/saint-of-day', { cache: 'no-store' });
+    if(!res.ok) throw new Error('saint-of-day not ok');
+    const data = await res.json();
+    nameEl.textContent = data.title || "Santo del día";
+    if (data.url) linkEl.href = data.url;
+    if (data.image) imgEl.src = data.image;
+  }catch(err){
+    nameEl.textContent = "Santo del día";
+    linkEl.href = "https://www.vaticannews.va/es/santos.html";
+  }
+}
+
+
+async function renderToday(){
+  // currently: santo del día (serverless)
+  await loadSaintOfDay();
+}
+
+
 function updateNavStrip(activeKey){
   $all(".navstrip__item").forEach(btn => {
     const k = btn.dataset.nav;
@@ -50,7 +81,7 @@ function nav(key){
   state.lastListView = key;
   showView(key);
   updateNavStrip(key);
-  if (key === "today") updateSaintOfDay();
+  if (key === "today") renderToday();
   if (key === "calendar") renderCalendar();
 }
 
@@ -397,6 +428,7 @@ async function fetchSaintMeta(vaticanUrl){
   return { ogTitle, ogImage };
 }
 
+async 
 async function updateSaintOfDay(){
   const nameEl = document.getElementById("saintOfDayName");
   const imgEl  = document.getElementById("saintOfDayImg");
@@ -404,26 +436,21 @@ async function updateSaintOfDay(){
   if (!nameEl || !imgEl || !linkEl) return;
 
   nameEl.textContent = "Cargando…";
+  linkEl.href = "https://www.vaticannews.va/es/santos.html";
 
   try{
-    const d = arDate();
-    const mm = pad2(d.getMonth()+1);
-    const dd = pad2(d.getDate());
-    const url = `https://www.vaticannews.va/es/santos/${mm}/${dd}.html`;
-    linkEl.href = url;
-
-    const meta = await fetchSaintMeta(url);
-    const title = (meta.ogTitle || "").replace(/^Santos?:\s*/i,"").trim() || "Santo del día";
-    nameEl.textContent = title;
-
-    if (meta.ogImage){
-      imgEl.src = meta.ogImage;
-    }
+    const res = await fetch('/.netlify/functions/saint-of-day', { cache: 'no-store' });
+    if(!res.ok) throw new Error('saint-of-day not ok');
+    const data = await res.json();
+    nameEl.textContent = data.title || "Santo del día";
+    if (data.url) linkEl.href = data.url;
+    if (data.image) imgEl.src = data.image;
   }catch(err){
-    nameEl.textContent = "Ver santo del día";
+    nameEl.textContent = "Santo del día";
     linkEl.href = "https://www.vaticannews.va/es/santos.html";
   }
 }
+
 
 // --- Calendario simple (eventos) ---
 function monthName(m){
