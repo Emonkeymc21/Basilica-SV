@@ -1,126 +1,56 @@
 [
   {
-    "title": "Semana Santa · Domingo de Ramos",
-    "start": "2026-03-29T00:00:00-03:00",
-    "end": "2026-03-29T23:59:00-03:00",
+    "id": "canto-2026-02-21",
+    "title": "Curso de Canto Gregoriano",
+    "start": "2026-02-21T17:30:00-03:00",
+    "end": "2026-02-21T19:00:00-03:00",
     "location": "Basílica San Vicente Ferrer",
-    "category": "semana_santa_2026",
-    "details": "Horario a confirmar"
+    "category": "formacion",
+    "details": "Nivel inicial. Prof. Mario Masera."
   },
   {
-    "title": "Semana Santa · Lunes Santo",
-    "start": "2026-03-30T00:00:00-03:00",
-    "end": "2026-03-30T23:59:00-03:00",
+    "id": "canto-2026-02-28",
+    "title": "Curso de Canto Gregoriano",
+    "start": "2026-02-28T17:30:00-03:00",
+    "end": "2026-02-28T19:00:00-03:00",
     "location": "Basílica San Vicente Ferrer",
-    "category": "semana_santa_2026",
-    "details": "Horario a confirmar"
+    "category": "formacion",
+    "details": "Nivel inicial. Prof. Mario Masera."
   },
   {
-    "title": "Semana Santa · Martes Santo",
-    "start": "2026-03-31T00:00:00-03:00",
-    "end": "2026-03-31T23:59:00-03:00",
+    "id": "canto-2026-03-07",
+    "title": "Curso de Canto Gregoriano",
+    "start": "2026-03-07T17:30:00-03:00",
+    "end": "2026-03-07T19:00:00-03:00",
     "location": "Basílica San Vicente Ferrer",
-    "category": "semana_santa_2026",
-    "details": "Horario a confirmar"
+    "category": "formacion",
+    "details": "Nivel inicial. Prof. Mario Masera."
   },
   {
-    "title": "Semana Santa · Miércoles Santo",
-    "start": "2026-04-01T00:00:00-03:00",
-    "end": "2026-04-01T23:59:00-03:00",
+    "id": "canto-2026-03-14",
+    "title": "Curso de Canto Gregoriano",
+    "start": "2026-03-14T17:30:00-03:00",
+    "end": "2026-03-14T19:00:00-03:00",
     "location": "Basílica San Vicente Ferrer",
-    "category": "semana_santa_2026",
-    "details": "Horario a confirmar"
+    "category": "formacion",
+    "details": "Nivel inicial. Prof. Mario Masera."
   },
   {
-    "title": "Semana Santa · Jueves Santo",
-    "start": "2026-04-02T00:00:00-03:00",
-    "end": "2026-04-02T23:59:00-03:00",
+    "id": "canto-2026-03-21",
+    "title": "Curso de Canto Gregoriano",
+    "start": "2026-03-21T17:30:00-03:00",
+    "end": "2026-03-21T19:00:00-03:00",
     "location": "Basílica San Vicente Ferrer",
-    "category": "semana_santa_2026",
-    "details": "Horario a confirmar"
+    "category": "formacion",
+    "details": "Nivel inicial. Prof. Mario Masera."
   },
   {
-    "title": "Semana Santa · Viernes Santo",
-    "start": "2026-04-03T00:00:00-03:00",
-    "end": "2026-04-03T23:59:00-03:00",
+    "id": "misa-enfermos",
+    "title": "Misa por los enfermos",
+    "start": "2026-03-13T20:00:00-03:00",
+    "end": "2026-03-13T21:00:00-03:00",
     "location": "Basílica San Vicente Ferrer",
-    "category": "semana_santa_2026",
-    "details": "Horario a confirmar"
-  },
-  {
-    "title": "Semana Santa · Sábado de Gloria",
-    "start": "2026-04-04T00:00:00-03:00",
-    "end": "2026-04-04T23:59:00-03:00",
-    "location": "Basílica San Vicente Ferrer",
-    "category": "semana_santa_2026",
-    "details": "Horario a confirmar"
-  },
-  {
-    "title": "Semana Santa · Domingo de Pascua",
-    "start": "2026-04-05T00:00:00-03:00",
-    "end": "2026-04-05T23:59:00-03:00",
-    "location": "Basílica San Vicente Ferrer",
-    "category": "semana_santa_2026",
-    "details": "Horario a confirmar"
-  },
-  {
-    "date": "2026-03-29",
-    "title": "Domingo de Ramos",
-    "time": "11:00",
-    "type": "misa"
-  },
-  {
-    "date": "2026-03-29",
-    "title": "Domingo de Ramos",
-    "time": "20:00",
-    "type": "misa"
-  },
-  {
-    "date": "2026-04-02",
-    "title": "Jueves Santo",
-    "time": "20:00",
-    "type": "especial"
-  },
-  {
-    "date": "2026-04-03",
-    "title": "Viernes Santo (Celebración de la Pasión)",
-    "time": "20:00",
-    "type": "especial"
-  },
-  {
-    "date": "2026-04-04",
-    "title": "Sábado de Gloria (Vigilia Pascual)",
-    "time": "20:00",
-    "type": "especial"
-  },
-  {
-    "date": "2026-04-05",
-    "title": "Domingo de Pascua",
-    "time": "11:00",
-    "type": "misa"
-  },
-  {
-    "date": "2026-04-05",
-    "title": "Domingo de Pascua",
-    "time": "20:00",
-    "type": "misa"
-  },
-  {
-    "date": "2026-11-09",
-    "title": "Dedicación a la Basílica San Juan de Letrán",
-    "time": "",
-    "place": ""
-  },
-  {
-    "date": "2026-11-21",
-    "title": "Nuestra Señora de la Salud",
-    "time": "",
-    "place": ""
-  },
-  {
-    "date": "2026-11-23",
-    "title": "Solemnidad de Cristo Rey",
-    "time": "",
-    "place": ""
+    "category": "celebracion",
+    "details": "2º viernes del mes. Rosario 19:00."
   }
 ]

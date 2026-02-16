@@ -3,24 +3,14 @@
     "id": "alabar",
     "title": "Alabaré",
     "category": "Entrada",
-    "tags": [
-      "alabanza"
-    ],
-    "lyrics": "Alabaré, alabaré...\nAlabaré a mi Señor...\n\n(pegá la letra completa acá)",
-    "songbooks": [
-      "all"
-    ]
+    "tags": ["alabanza"],
+    "lyrics": "Alabaré, alabaré...\nAlabaré a mi Señor...\n\n(pegá la letra completa acá)"
   },
   {
     "id": "pan-vida",
     "title": "Pan de Vida",
     "category": "Comunión",
-    "tags": [
-      "eucaristía"
-    ],
-    "lyrics": "Tú eres el pan de vida...\n\n(pegá la letra completa acá)",
-    "songbooks": [
-      "all"
-    ]
+    "tags": ["eucaristía"],
+    "lyrics": "Tú eres el pan de vida...\n\n(pegá la letra completa acá)"
   }
 ]

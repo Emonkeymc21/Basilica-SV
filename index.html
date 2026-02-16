@@ -20,60 +20,165 @@
       </div>
     </div>
     <button class="btn btn--ghost" id="btnInstall" hidden>Instalar</button>
-  
-    <nav class="navstrip" aria-label="Navegación principal">
-      <button class="navstrip__item" data-nav="home">Inicio</button>
-      <button class="navstrip__item" data-nav="today">Hoy</button>
-      <button class="navstrip__item" data-nav="calendar">Calendario</button>
-      <button class="navstrip__item" data-nav="songs">Cancioneros</button>
-      <button class="navstrip__item" data-nav="schedule">Horarios</button>
-      <button class="navstrip__item" data-nav="announcements">Novedades</button>
-      <button class="navstrip__item" data-nav="prayers">Oraciones</button>
-      <button class="navstrip__item" data-nav="saints">Santos</button>
-      <button class="navstrip__item" data-nav="history">Historia</button>
-    </nav>
-</header>
+  </header>
 
   <main class="container">
-  <!-- INICIO -->
-  <section class="view view--active" id="viewHome" aria-labelledby="nav-home">
-    <section class="hero hero--photo" id="homeHero">
-      <div class="hero__overlay">
-        <h1 class="hero__title">Basílica San Vicente Ferrer</h1>
-        <p class="hero__subtitle">San Vicente Ferrer te guía hacia Jesús</p>
+    <!-- HOME -->
+    <section id="viewHome" class="view view--active">
+      <section class="hero">
+        <div class="hero__title">San Vicente Ferrer te guía hacia Jesús</div>
+        <div class="hero__meta">Cantos · Oraciones · Santos · Horarios · Novedades</div>
+      </section>
+
+      <div class="grid">
+        <button class="card" data-nav="songs">
+          <div class="card__title">Cancionero</div>
+          <div class="card__desc">Buscar por título o por letra</div>
+        </button>
+
+        <button class="card" data-nav="schedule">
+          <div class="card__title">Horarios</div>
+          <div class="card__desc">Misas · Confesiones · Adoración · Secretaría</div>
+        </button>
+
+        
+        <button class="card" data-nav="today">
+          <div class="card__title">Hoy</div>
+          <div class="card__desc">Santo del día y frase</div>
+        </button>
+
+        <button class="card" data-nav="calendar">
+          <div class="card__title">Calendario</div>
+          <div class="card__desc">Agenda de actividades</div>
+        </button>
+
+<button class="card" data-nav="announcements">
+          <div class="card__title">Novedades</div>
+          <div class="card__desc">Cursos, catequesis y avisos</div>
+        </button>
+
+        <button class="card" data-nav="prayers">
+          <div class="card__title">Oraciones</div>
+          <div class="card__desc">Confesión y oraciones básicas</div>
+        </button>
+
+        <button class="card" data-nav="saints">
+          <div class="card__title">Santos</div>
+          <div class="card__desc">Santo del día y listado</div>
+        </button>
+
+        <button class="card" data-nav="history">
+          <div class="card__title">Historia</div>
+          <div class="card__desc">Nuestra comunidad</div>
+        </button>
       </div>
-    </section>
 
-    <section class="panel">
-      <h2 class="panel__title">Feed</h2>
-      <p class="muted">Acá van a ir las novedades, avisos y destacadas. (Las imágenes las cargamos después.)</p>
-
-      <div class="feedcards" id="homeFeedCards">
-        <article class="card">
-          <div class="card__title">Próximas celebraciones</div>
-          <div class="card__text" id="homeNextEvents">Cargando…</div>
-          <a class="card__link" href="#calendar" data-nav="calendar">Ver calendario</a>
-        </article>
-        <article class="card">
-          <div class="card__title">Santo del día</div>
-          <div class="card__text" id="homeSaintTeaser">Cargando…</div>
-          <a class="card__link" href="#" id="homeSaintLink" target="_blank" rel="noopener">Abrir</a>
-        </article>
-        <article class="card">
-          <div class="card__title">Ubicación</div>
-          <div class="card__text">Lavalle 60, Godoy Cruz, Mendoza</div>
-          <a class="card__link" href="#schedule" data-nav="schedule">Ver mapa</a>
-        </article>
-      </div>
-
-      <div class="tip">
+      <div class="note">
         Tip: imprimí un QR con el link de esta página y pegalo en la entrada del templo 🙌
       </div>
+          <section class="panel" style="margin-top:16px">
+        <h3 style="margin-top:0">Ubicación de la Basílica</h3>
+        <iframe title="Mapa Basílica San Vicente Ferrer"
+          src="https://www.google.com/maps?q=Bas%C3%ADlica%20San%20Vicente%20Ferrer%20Godoy%20Cruz%20Mendoza&output=embed"
+          loading="lazy" referrerpolicy="no-referrer-when-downgrade"
+          style="width:100%;height:320px;border:0;border-radius:12px"></iframe>
+      </section>
     </section>
-  </section>
 
-  <!-- HOY -->
-  <section id="viewToday" class="view">
+    <!-- ANNOUNCEMENTS LIST -->
+    <section id="viewAnnouncements" class="view">
+      <div class="toolbar">
+        <button class="btn btn--ghost" data-back="home">←</button>
+        <div class="toolbar__title">Novedades</div>
+      </div>
+
+      <div class="list" id="announcementsList"></div>
+    </section>
+
+    <!-- ANNOUNCEMENT DETAIL -->
+    <section id="viewAnnouncementDetail" class="view">
+      <div class="toolbar">
+        <button class="btn btn--ghost" id="btnBackToAnnouncements">←</button>
+        <div class="toolbar__title">Detalle</div>
+      </div>
+
+      <div class="detail">
+        <img id="announcementImg" class="detail__img" alt="" />
+        <div class="detail__body">
+          <div class="detail__title" id="announcementTitle"></div>
+          <div class="detail__subtitle" id="announcementSubtitle"></div>
+
+          <div class="detail__block" id="announcementWhen"></div>
+          <div class="detail__block" id="announcementWhere"></div>
+
+          <pre class="detail__text" id="announcementDetails"></pre>
+        </div>
+      </div>
+    </section>
+
+    <!-- SONGS LIST -->
+    <section id="viewSongs" class="view">
+      <div class="toolbar">
+        <button class="btn btn--ghost" data-back="home">←</button>
+        <div class="toolbar__title">Cancionero</div>
+      </div>
+
+      <div class="search">
+        <input id="songSearch" type="search" placeholder="Buscar por título o letra..." autocomplete="off" />
+      </div>
+
+      <div class="chips" id="categoryChips"></div>
+
+      <div class="list" id="songsList"></div>
+    </section>
+
+    <!-- SONG READER -->
+    <section id="viewSongReader" class="view">
+      <div class="toolbar">
+        <button class="btn btn--ghost" id="btnBackToSongs">←</button>
+        <div class="toolbar__title" id="songTitle">Canción</div>
+        <button class="btn btn--ghost" id="btnWake">Pantalla</button>
+      </div>
+
+      <div class="reader-controls">
+        <button class="btn" id="fontMinus">A-</button>
+        <button class="btn" id="fontPlus">A+</button>
+      </div>
+
+      <article class="reader" id="songLyrics"></article>
+    </section>
+
+    <!-- PRAYERS -->
+    <section id="viewPrayers" class="view">
+      <div class="toolbar">
+        <button class="btn btn--ghost" data-back="home">←</button>
+        <div class="toolbar__title">Oraciones</div>
+      </div>
+      <div class="list" id="prayersList"></div>
+    </section>
+
+    <!-- SAINTS -->
+    <section id="viewSaints" class="view">
+      <div class="toolbar">
+        <button class="btn btn--ghost" data-back="home">←</button>
+        <div class="toolbar__title">Santos</div>
+      </div>
+      <div class="panel" id="saintOfDay"></div>
+      <div class="list" id="saintsList"></div>
+    </section>
+
+    <!-- HISTORY -->
+    <section id="viewHistory" class="view">
+      <div class="toolbar">
+        <button class="btn btn--ghost" data-back="home">←</button>
+        <div class="toolbar__title">Historia</div>
+      </div>
+      <div class="panel" id="historyPanel"></div>
+    </section>
+
+
+    <!-- TODAY --> 
+    <section id="viewToday" class="view">
       <div class="toolbar">
         <button class="btn btn--ghost" data-back="home">←</button>
         <div class="toolbar__title">Hoy</div>
@@ -84,7 +189,9 @@
 
         <div class="today__card">
           <div class="today__label">Santo del día</div>
+          <img id="todaySaintImage" alt="Santo del día" style="display:none;width:100%;max-height:260px;object-fit:cover;border-radius:12px;margin:10px 0;"/>
           <div class="today__title" id="todaySaintTitle">Cargando…</div>
+          <div class="today__text" id="todaySaintDescription"></div>
           <div class="today__actions">
             <a class="btn btn--primary" id="todaySaintLink" href="#" target="_blank" rel="noopener">Ver</a>
             <button class="btn" id="btnReloadToday">Actualizar</button>
@@ -100,10 +207,9 @@
         </div>
       </div>
     </section>
-  </section>
 
-  <!-- CALENDARIO -->
-  <section id="viewCalendar" class="view">
+    <!-- CALENDAR -->
+    <section id="viewCalendar" class="view">
       <div class="toolbar">
         <button class="btn btn--ghost" data-back="home">←</button>
         <div class="toolbar__title">Calendario</div>
@@ -126,188 +232,20 @@
       </div>
     </section>
 
-    <section class="panel">
-      <h3 class="panel__subtitle">Próximos 14 días</h3>
-      <div id="calendarNextEvents" class="list"></div>
-      <p class="muted small">Incluye horarios regulares de verano (hasta Semana Santa 2026) y fechas especiales.</p>
-    </section>
-
-    <section class="panel">
-      <h3 class="panel__subtitle">Semana Santa 2026</h3>
-      <p>Desde el <strong>domingo 29 de marzo</strong> hasta el <strong>domingo 5 de abril</strong>.</p>
-      <p class="muted">Los horarios y celebraciones específicas las cargamos en cuanto nos pases el detalle.</p>
-    </section>
-  </section>
-
-  <!-- CANCIONEROS (LISTA) -->
-  <section class="view" id="viewSongs">
-    <div class="toolbar">
-      <h2>Cancioneros</h2>
-      <input class="search" id="songSearch" placeholder="Buscar por título o por letra" />
-    </div>
-
-    <section class="panel">
-      <h3 class="panel__subtitle">Tipo de cancionero</h3>
-      <div class="chips" id="songbookChips"></div>
-      <select id="songbookSelect" class="select" hidden></select>
-      <p class="muted small">Ejemplos: Misa Domingo 11hs, Misa 20hs, Pascua, Jueves Santo, Viernes Santo, Sábado de Gloria…</p>
-    </section>
-
-    <div id="songsList" class="list"></div>
-  </section>
-
-  <!-- LECTOR DE CANCIÓN -->
-  <section class="view" id="viewSongReader">
-    <div class="toolbar">
-      <button class="btn" id="btnBackToSongs">← Volver</button>
-      <div class="toolbar__spacer"></div>
-      <button class="btn" id="fontMinus">A-</button>
-      <button class="btn" id="fontPlus">A+</button>
-    </div>
-
-    <section class="panel">
-      <h2 id="songTitle"></h2>
-      <p class="muted" id="songMeta"></p>
-      <pre class="lyrics" id="songLyrics"></pre>
-    </section>
-  </section>
-
-  <!-- HORARIOS -->
-  <section class="view" id="viewSchedule">
-    <div class="toolbar">
-      <h2>Horarios</h2>
-      <span class="muted">Primavera / Verano (hasta Semana Santa 2026)</span>
-    </div>
-
-    <section class="grid2">
-      <article class="card">
-        <div class="card__title">Misas</div>
-        <div class="card__text" id="scheduleMass"></div>
-      </article>
-      <article class="card">
-        <div class="card__title">Confesiones</div>
-        <div class="card__text" id="scheduleConfessions"></div>
-      </article>
-      <article class="card">
-        <div class="card__title">Adoración Eucarística</div>
-        <div class="card__text" id="scheduleAdoration"></div>
-      </article>
-      <article class="card">
-        <div class="card__title">Secretaría</div>
-        <div class="card__text" id="scheduleOffice"></div>
-      </article>
-    </section>
-
-    <section class="panel">
-      <h3 class="panel__subtitle">Mapa</h3>
-      <div class="mapwrap">
-        <iframe
-          title="Mapa Basílica San Vicente Ferrer"
-          loading="lazy"
-          referrerpolicy="no-referrer-when-downgrade"
-          src="https://www.google.com/maps?q=Bas%C3%ADlica%20San%20Vicente%20Ferrer%2C%20Lavalle%2060%2C%20Godoy%20Cruz%2C%20Mendoza&output=embed">
-        </iframe>
+    <!-- SCHEDULE -->
+    <section id="viewSchedule" class="view">
+      <div class="toolbar">
+        <button class="btn btn--ghost" data-back="home">←</button>
+        <div class="toolbar__title">Horarios</div>
       </div>
-      <a class="btn btn--primary" target="_blank" rel="noopener"
-        href="https://www.google.com/maps/search/?api=1&query=Bas%C3%ADlica%20San%20Vicente%20Ferrer%2C%20Lavalle%2060%2C%20Godoy%20Cruz%2C%20Mendoza">Abrir en Google Maps</a>
+      <div class="schedule" id="schedulePanel"></div>
+      <div class="note note--small" id="scheduleAddress"></div>
     </section>
-  </section>
+  </main>
 
-  <!-- NOVEDADES -->
-  <section class="view" id="viewAnnouncements">
-    <div class="toolbar">
-      <h2>Novedades</h2>
-      <span class="muted">Cursos, catequesis y avisos</span>
-    </div>
-    <div id="announcementsList" class="list"></div>
-  </section>
+  
 
-  <!-- LECTOR DE NOVEDAD -->
-  <section class="view" id="viewAnnouncementReader">
-    <div class="toolbar">
-      <button class="btn" id="btnBackToAnnouncements">← Volver</button>
-    </div>
-    <section class="panel">
-      <h2 id="announcementTitle"></h2>
-      <div class="prose" id="announcementBody"></div>
-    </section>
-  </section>
-
-  <!-- ORACIONES -->
-  <section class="view" id="viewPrayers">
-    <div class="toolbar">
-      <h2>Oraciones</h2>
-      <span class="muted">Confesión y oraciones básicas</span>
-    </div>
-    <div id="prayersList" class="list"></div>
-  </section>
-
-  <!-- LECTOR DE ORACIÓN -->
-  <section class="view" id="viewPrayerReader">
-    <div class="toolbar">
-      <button class="btn" id="btnBackToPrayers">← Volver</button>
-      <div class="toolbar__spacer"></div>
-      <button class="btn" id="fontMinus2">A-</button>
-      <button class="btn" id="fontPlus2">A+</button>
-    </div>
-    <section class="panel">
-      <h2 id="prayerTitle"></h2>
-      <pre class="lyrics" id="prayerBody"></pre>
-    </section>
-  </section>
-
-  <!-- SANTOS -->
-  <section class="view" id="viewSaints">
-    <div class="toolbar">
-      <h2>Santos</h2>
-      <span class="muted">Santo del día + listado</span>
-    </div>
-    <section class="panel">
-      <div class="card">
-        <div class="card__title" id="saintTitle2">Santo del día</div>
-        <div class="card__text" id="saintBio2">Cargando…</div>
-        <a class="card__link" id="saintLink2" target="_blank" rel="noopener">Abrir</a>
-      </div>
-    </section>
-    <div id="saintsList" class="list"></div>
-  </section>
-
-  <!-- HISTORIA --><section class="view" id="viewLocation" data-route="location">
-      <div class="view__header">
-        <h2>Ubicación</h2>
-        <p>Basílica San Vicente Ferrer · Godoy Cruz, Mendoza</p>
-      </div>
-
-      <div class="card">
-        <div class="card__title">Cómo llegar</div>
-        <div class="card__body">
-          <iframe
-            title="Mapa Basílica San Vicente Ferrer"
-            class="map__frame"
-            loading="lazy"
-            referrerpolicy="no-referrer-when-downgrade"
-            src="https://www.google.com/maps?q=Bas%C3%ADlica%20San%20Vicente%20Ferrer%20Godoy%20Cruz%20Mendoza&output=embed">
-          </iframe>
-          <div class="map__links">
-            <a class="link" target="_blank" rel="noopener" href="https://www.google.com/maps?q=Bas%C3%ADlica%20San%20Vicente%20Ferrer%20Godoy%20Cruz%20Mendoza">Abrir en Google Maps</a>
-          </div>
-        </div>
-      </div>
-    </section>
-
-
-  <section class="view" id="viewHistory">
-    <div class="toolbar">
-      <h2>Historia</h2>
-      <span class="muted">Nuestra comunidad</span>
-    </div>
-    <div id="historyPanel" class="prose"></div>
-  </section>
-</main>
-
-<button class="scrolltop" id="scrollTopBtn" aria-label="Subir">↑</button>
-
+  <button id="btnTop" class="btn btn--primary" style="position:fixed;right:16px;bottom:16px;z-index:999;border-radius:999px;display:none">↑ Subir</button>
   <script src="app.js"></script>
-  <button id="btnScrollTop" class="scrolltop" title="Subir">↑</button>
 </body>
 </html>

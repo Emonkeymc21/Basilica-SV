@@ -1,62 +1,56 @@
-export async function handler(event, context) {
-  try {
-    // Use Argentina time (UTC-3)
-    const now = new Date(new Date().toLocaleString("en-US", { timeZone: "America/Argentina/Buenos_Aires" }));
-    const mm = String(now.getMonth() + 1).padStart(2, "0");
-    const dd = String(now.getDate()).padStart(2, "0");
+// netlify/functions/saint-of-day.js
+// Extrae santo del día desde Vatican News en español
+const axios = require("axios");
+const cheerio = require("cheerio");
 
-    const pageUrl = `https://www.vaticannews.va/es/santos/${mm}/${dd}.html`;
+function clean(s=''){ return s.replace(/\s+/g,' ').trim(); }
 
-    // Fetch HTML (server-side: no CORS issues)
-    const res = await fetch(pageUrl, {
-      headers: {
-        "user-agent": "Mozilla/5.0 (compatible; BasilicaSanVicenteBot/1.0; +https://example.com)"
+exports.handler = async ()=>{
+  const now = new Date();
+  const mm = String(now.getMonth()+1).padStart(2,'0');
+  const dd = String(now.getDate()).padStart(2,'0');
+  const url = `https://www.vaticannews.va/es/santos/${mm}/${dd}.html`;
+
+  try{
+    const {data:html}= await axios.get(url,{timeout:12000, headers:{'User-Agent':'Mozilla/5.0','Accept-Language':'es-ES,es;q=0.9'}});
+    const $=cheerio.load(html);
+
+    // Título
+    let title = clean($('h1').first().text()) || clean($('.section__head-title').first().text()) || '';
+    if(!title) title = clean($('.article-title, .title').first().text());
+
+    // Intentar título específico del santo
+    const blocks=['.article-body','.article__content','.article-content','.section__content','main'];
+    let saintTitle='';
+    for(const b of blocks){
+      const t=clean($(b).find('h2,h3,strong').first().text());
+      if(t && t.length>6){ saintTitle=t; break;}
+    }
+    if(!saintTitle) saintTitle=title || `Santo del día (${dd}/${mm})`;
+
+    // Descripción
+    let description='';
+    for(const b of blocks){
+      const ps=$(b).find('p').map((i,el)=>clean($(el).text())).get().filter(Boolean);
+      if(ps.length){ description=ps.slice(0,2).join(' '); break;}
+    }
+
+    // Imagen
+    let image='';
+    const imgSel=['meta[property="og:image"]','main img','.article img','.article-body img'];
+    for(const s of imgSel){
+      let src='';
+      if(s.startsWith('meta')) src=$(s).attr('content')||'';
+      else src=$(s).first().attr('src')||'';
+      if(src){
+        if(src.startsWith('//')) src='https:'+src;
+        if(src.startsWith('/')) src='https://www.vaticannews.va'+src;
+        image=src; break;
       }
-    });
-    if (!res.ok) {
-      throw new Error(`VaticanNews status ${res.status}`);
-    }
-    const html = await res.text();
-
-    // Try to get OpenGraph image (usually present)
-    const ogImgMatch = html.match(/property=["']og:image["'][^>]*content=["']([^"']+)["']/i);
-    const image = ogImgMatch ? ogImgMatch[1] : null;
-
-    // First h2 usually contains the main saint name on that day page
-    // e.g. <h2 ...>s. Hilario ...</h2>
-    const h2Match = html.match(/<h2[^>]*>(.*?)<\/h2>/is);
-    const rawTitle = h2Match ? h2Match[1] : "Santo del día";
-    const title = rawTitle
-      .replace(/<[^>]+>/g, " ")
-      .replace(/\s+/g, " ")
-      .trim();
-
-    // "Leer todo..." link for the first saint (if present)
-    const leerTodoMatch = html.match(/href=["']([^"']+)["'][^>]*>\s*Leer todo\.\.\.\s*<\/a>/i);
-    let url = pageUrl;
-    if (leerTodoMatch && leerTodoMatch[1]) {
-      const href = leerTodoMatch[1].startsWith("http") ? leerTodoMatch[1] : `https://www.vaticannews.va${leerTodoMatch[1]}`;
-      url = href;
     }
 
-    return {
-      statusCode: 200,
-      headers: {
-        "content-type": "application/json; charset=utf-8",
-        "cache-control": "public, max-age=3600"
-      },
-      body: JSON.stringify({ title, image, url, source: "vaticannews" })
-    };
-  } catch (err) {
-    return {
-      statusCode: 200,
-      headers: { "content-type": "application/json; charset=utf-8" },
-      body: JSON.stringify({
-        title: "Santo del día",
-        image: null,
-        url: "https://www.vaticannews.va/es/santos.html",
-        source: "fallback"
-      })
-    };
+    return {statusCode:200, headers:{'Content-Type':'application/json; charset=utf-8','Cache-Control':'public, max-age=1800'}, body:JSON.stringify({ok:true,title:saintTitle,description,image,url,source:'vaticannews'})};
+  }catch(e){
+    return {statusCode:200, headers:{'Content-Type':'application/json; charset=utf-8'}, body:JSON.stringify({ok:false,title:`Santo del día (${dd}/${mm})`,description:'No pudimos obtener el contenido ahora. Tocá Actualizar en unos segundos.',image:'',url,source:'vaticannews',error:e.message})};
   }
-}
+};
