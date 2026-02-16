@@ -1,0 +1,29 @@
+[
+  {
+    "id": "canto-gregoriano",
+    "title": "Curso de Canto Gregoriano",
+    "subtitle": "Nivel inicial · No se precisan conocimientos previos",
+    "when": "Sábados: 21/2 · 28/2 · 07/3 · 14/3 · 21/3 · 17:30 a 19:00",
+    "where": "Basílica San Vicente Ferrer · Lavalle 60 · Godoy Cruz",
+    "image": "assets/img/curso-canto-gregoriano.png",
+    "details": "Profesor: Mario Masera.\nTraé cuaderno y ganas de aprender."
+  },
+  {
+    "id": "catequesis-familiar",
+    "title": "Catequesis Familiar",
+    "subtitle": "¡Sumate y comenzá este camino de fe!",
+    "when": "Inscripciones abiertas hasta fines de abril · Atención desde las 18 hs (solo WhatsApp)",
+    "where": "Basílica San Vicente Ferrer · Godoy Cruz",
+    "image": "assets/img/catequesis-familiar.png",
+    "details": "Contactos:\n• Verónica: 261 573-2600\n• Claudia: 261 667-6598"
+  },
+  {
+    "id": "misa-enfermos",
+    "title": "Santa Misa por los enfermos",
+    "subtitle": "Unción de los enfermos · Bendición de agua y remedios",
+    "when": "2º viernes de cada mes · 20:00 hs (Santo Rosario 19:00 hs)",
+    "where": "Basílica San Vicente Ferrer · Lavalle 60 · Godoy Cruz",
+    "image": "assets/img/misa-enfermos.png",
+    "details": "Te esperamos para rezar juntos."
+  }
+]

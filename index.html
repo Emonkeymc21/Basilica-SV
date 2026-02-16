@@ -3,20 +3,20 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <meta name="theme-color" content="#0b1b3a" />
-  <title>Parroquia</title>
+  <meta name="theme-color" content="#1e63b6" />
+  <title>Basílica San Vicente Ferrer</title>
 
   <link rel="manifest" href="manifest.json" />
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='64' height='64'><text y='52' font-size='52'>⛪</text></svg>">
+  <link rel="icon" href="assets/img/logo.png">
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
   <header class="topbar">
     <div class="brand">
-      <div class="brand__icon">⛪</div>
+      <img class="brand__logo" src="assets/img/logo.png" alt="Logo Basílica San Vicente Ferrer" />
       <div class="brand__text">
-        <div class="brand__title" id="parishName">Parroquia</div>
-        <div class="brand__subtitle">Cantos · Oraciones · Santos · Historia</div>
+        <div class="brand__title" id="parishName">Basílica San Vicente Ferrer</div>
+        <div class="brand__subtitle">Godoy Cruz · Mendoza</div>
       </div>
     </div>
     <button class="btn btn--ghost" id="btnInstall" hidden>Instalar</button>
@@ -25,42 +25,83 @@
   <main class="container">
     <!-- HOME -->
     <section id="viewHome" class="view view--active">
+      <section class="hero">
+        <div class="hero__title">San Vicente Ferrer te guía hacia Jesús</div>
+        <div class="hero__meta">Cantos · Oraciones · Santos · Horarios · Novedades</div>
+      </section>
+
       <div class="grid">
         <button class="card" data-nav="songs">
           <div class="card__title">Cancionero</div>
-          <div class="card__desc">Buscar por título o letra</div>
-        </button>
-
-        <button class="card" data-nav="prayers">
-          <div class="card__title">Oraciones</div>
-          <div class="card__desc">Confesión y básicas</div>
-        </button>
-
-        <button class="card" data-nav="saints">
-          <div class="card__title">Santos</div>
-          <div class="card__desc">Santo del día</div>
-        </button>
-
-        <button class="card" data-nav="history">
-          <div class="card__title">Historia</div>
-          <div class="card__desc">Nuestra parroquia</div>
+          <div class="card__desc">Buscar por título o por letra</div>
         </button>
 
         <button class="card" data-nav="schedule">
           <div class="card__title">Horarios</div>
-          <div class="card__desc">Misas, confesión, contacto</div>
+          <div class="card__desc">Misas · Confesiones · Adoración · Secretaría</div>
+        </button>
+
+        <button class="card" data-nav="announcements">
+          <div class="card__title">Novedades</div>
+          <div class="card__desc">Cursos, catequesis y avisos</div>
+        </button>
+
+        <button class="card" data-nav="prayers">
+          <div class="card__title">Oraciones</div>
+          <div class="card__desc">Confesión y oraciones básicas</div>
+        </button>
+
+        <button class="card" data-nav="saints">
+          <div class="card__title">Santos</div>
+          <div class="card__desc">Santo del día y listado</div>
+        </button>
+
+        <button class="card" data-nav="history">
+          <div class="card__title">Historia</div>
+          <div class="card__desc">Nuestra comunidad</div>
         </button>
       </div>
 
       <div class="note">
-        Tip: poné un QR en el templo que apunte a esta página 🔥
+        Tip: imprimí un QR con el link de esta página y pegalo en la entrada del templo 🙌
+      </div>
+    </section>
+
+    <!-- ANNOUNCEMENTS LIST -->
+    <section id="viewAnnouncements" class="view">
+      <div class="toolbar">
+        <button class="btn btn--ghost" data-back="home">←</button>
+        <div class="toolbar__title">Novedades</div>
+      </div>
+
+      <div class="list" id="announcementsList"></div>
+    </section>
+
+    <!-- ANNOUNCEMENT DETAIL -->
+    <section id="viewAnnouncementDetail" class="view">
+      <div class="toolbar">
+        <button class="btn btn--ghost" id="btnBackToAnnouncements">←</button>
+        <div class="toolbar__title">Detalle</div>
+      </div>
+
+      <div class="detail">
+        <img id="announcementImg" class="detail__img" alt="" />
+        <div class="detail__body">
+          <div class="detail__title" id="announcementTitle"></div>
+          <div class="detail__subtitle" id="announcementSubtitle"></div>
+
+          <div class="detail__block" id="announcementWhen"></div>
+          <div class="detail__block" id="announcementWhere"></div>
+
+          <pre class="detail__text" id="announcementDetails"></pre>
+        </div>
       </div>
     </section>
 
     <!-- SONGS LIST -->
     <section id="viewSongs" class="view">
       <div class="toolbar">
-        <button class="btn btn--ghost" data-back>←</button>
+        <button class="btn btn--ghost" data-back="home">←</button>
         <div class="toolbar__title">Cancionero</div>
       </div>
 
@@ -92,7 +133,7 @@
     <!-- PRAYERS -->
     <section id="viewPrayers" class="view">
       <div class="toolbar">
-        <button class="btn btn--ghost" data-back>←</button>
+        <button class="btn btn--ghost" data-back="home">←</button>
         <div class="toolbar__title">Oraciones</div>
       </div>
       <div class="list" id="prayersList"></div>
@@ -101,7 +142,7 @@
     <!-- SAINTS -->
     <section id="viewSaints" class="view">
       <div class="toolbar">
-        <button class="btn btn--ghost" data-back>←</button>
+        <button class="btn btn--ghost" data-back="home">←</button>
         <div class="toolbar__title">Santos</div>
       </div>
       <div class="panel" id="saintOfDay"></div>
@@ -111,7 +152,7 @@
     <!-- HISTORY -->
     <section id="viewHistory" class="view">
       <div class="toolbar">
-        <button class="btn btn--ghost" data-back>←</button>
+        <button class="btn btn--ghost" data-back="home">←</button>
         <div class="toolbar__title">Historia</div>
       </div>
       <div class="panel" id="historyPanel"></div>
@@ -120,17 +161,18 @@
     <!-- SCHEDULE -->
     <section id="viewSchedule" class="view">
       <div class="toolbar">
-        <button class="btn btn--ghost" data-back>←</button>
+        <button class="btn btn--ghost" data-back="home">←</button>
         <div class="toolbar__title">Horarios</div>
       </div>
-      <div class="panel" id="schedulePanel"></div>
+      <div class="schedule" id="schedulePanel"></div>
+      <div class="note note--small" id="scheduleAddress"></div>
     </section>
   </main>
 
   <footer class="bottombar">
     <button class="tab" data-nav="home">Inicio</button>
     <button class="tab" data-nav="songs">Cantos</button>
-    <button class="tab" data-nav="prayers">Oraciones</button>
+    <button class="tab" data-nav="announcements">Novedades</button>
     <button class="tab" data-nav="schedule">Horarios</button>
   </footer>
 

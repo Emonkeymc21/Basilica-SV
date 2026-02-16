@@ -1,14 +1,23 @@
-const CACHE = "parroquia-v1";
+const CACHE = "san-vicente-v2";
 const ASSETS = [
-  "/",
-  "/index.html",
-  "/styles.css",
-  "/app.js",
-  "/manifest.json",
-  "/data/songs.json",
-  "/data/prayers.json",
-  "/data/saints.json",
-  "/data/history.json"
+  "./",
+  "./index.html",
+  "./styles.css",
+  "./app.js",
+  "./manifest.json",
+
+  "./data/songs.json",
+  "./data/prayers.json",
+  "./data/saints.json",
+  "./data/history.json",
+  "./data/schedule.json",
+  "./data/announcements.json",
+
+  "./assets/img/logo.png",
+  "./assets/img/curso-canto-gregoriano.png",
+  "./assets/img/catequesis-familiar.png",
+  "./assets/img/misa-enfermos.png",
+  "./assets/img/horarios-primavera-verano.png",
 ];
 
 self.addEventListener("install", (event) => {

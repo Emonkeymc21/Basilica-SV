@@ -1,5 +1,7 @@
 const VIEWS = {
   home: "viewHome",
+  announcements: "viewAnnouncements",
+  announcementDetail: "viewAnnouncementDetail",
   songs: "viewSongs",
   songReader: "viewSongReader",
   prayers: "viewPrayers",
@@ -14,10 +16,12 @@ let state = {
   saints: [],
   history: null,
   schedule: null,
+  announcements: [],
   category: "Todas",
   query: "",
   fontSize: 18,
   wakeLock: null,
+  lastListView: "home",
 };
 
 function $(sel) { return document.querySelector(sel); }
@@ -31,9 +35,8 @@ function showView(key){
 }
 
 function nav(key){
+  state.lastListView = key;
   showView(key);
-  // marcar tabs (simple)
-  $all(".tab").forEach(t => t.classList.remove("chip--active"));
 }
 
 async function loadJSON(path){
@@ -50,6 +53,13 @@ function normalize(s){
     .replace(/\p{Diacritic}/gu, "");
 }
 
+function escapeHTML(str){
+  return (str || "").replace(/[&<>"']/g, m => ({
+    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"
+  }[m]));
+}
+
+/* -------------------- Cancionero -------------------- */
 function renderCategoryChips(){
   const el = $("#categoryChips");
   const cats = new Set(["Todas"]);
@@ -82,7 +92,6 @@ function renderSongsList(){
     return hay.includes(q);
   });
 
-  // orden alfabético por título
   filtered.sort((a,b) => (a.title || "").localeCompare((b.title || ""), "es"));
 
   list.innerHTML = "";
@@ -93,7 +102,7 @@ function renderSongsList(){
 
   filtered.forEach(song => {
     const item = document.createElement("button");
-    item.className = "item";
+    item.className = "item item--pressable";
     item.innerHTML = `
       <div class="item__title">${escapeHTML(song.title)}</div>
       <div class="item__meta">${escapeHTML(song.category || "Sin categoría")}</div>
@@ -107,15 +116,10 @@ function openSong(song){
   $("#songTitle").textContent = song.title || "Canción";
   $("#songLyrics").textContent = song.lyrics || "";
   $("#songLyrics").style.fontSize = state.fontSize + "px";
-  nav("songReader");
+  showView("songReader");
 }
 
-function escapeHTML(str){
-  return (str || "").replace(/[&<>"']/g, m => ({
-    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"
-  }[m]));
-}
-
+/* -------------------- Oraciones -------------------- */
 function renderPrayers(){
   const list = $("#prayersList");
   list.innerHTML = "";
@@ -131,9 +135,10 @@ function renderPrayers(){
   });
 }
 
+/* -------------------- Santos -------------------- */
 function renderSaints(){
   const today = new Date();
-  const key = `${today.getMonth()+1}-${today.getDate()}`; // ejemplo simple m-d
+  const key = `${today.getMonth()+1}-${today.getDate()}`;
   const sod = state.saints.find(s => s.key === key) || null;
 
   $("#saintOfDay").textContent = sod
@@ -157,15 +162,73 @@ function renderSaints(){
     });
 }
 
+/* -------------------- Historia -------------------- */
 function renderHistory(){
-  $("#historyPanel").textContent = state.history?.text || "Historia (pendiente)\n\nEditá data/history.json";
+  const title = state.history?.title ? `${state.history.title}\n\n` : "";
+  $("#historyPanel").textContent = title + (state.history?.text || "Historia (pendiente)\n\nEditá data/history.json");
 }
 
+/* -------------------- Horarios -------------------- */
 function renderSchedule(){
-  $("#schedulePanel").textContent = state.schedule?.text || "Horarios (pendiente)\n\nEditá data/history.json o data/schedule.json (si querés separado)";
+  const panel = $("#schedulePanel");
+  const address = $("#scheduleAddress");
+  panel.innerHTML = "";
+
+  if (!state.schedule){
+    panel.innerHTML = `<div class="note">Horarios (pendiente). Editá data/schedule.json</div>`;
+    return;
+  }
+
+  state.schedule.sections.forEach(sec => {
+    const card = document.createElement("div");
+    card.className = "schedule-card";
+    card.innerHTML = `<div class="schedule-title">${escapeHTML(sec.title)}</div>`;
+    sec.items.forEach(it => {
+      const row = document.createElement("div");
+      row.className = "schedule-item";
+      row.innerHTML = `<span>${escapeHTML(it.label)}</span><strong>${escapeHTML(it.value)}</strong>`;
+      card.appendChild(row);
+    });
+    panel.appendChild(card);
+  });
+
+  address.textContent = state.schedule.address || "";
 }
 
-// Wake Lock (mantener pantalla encendida)
+/* -------------------- Novedades -------------------- */
+function renderAnnouncements(){
+  const list = $("#announcementsList");
+  list.innerHTML = "";
+
+  if (!state.announcements.length){
+    list.innerHTML = `<div class="note">Todavía no hay novedades cargadas.</div>`;
+    return;
+  }
+
+  state.announcements.forEach(a => {
+    const item = document.createElement("button");
+    item.className = "item item--pressable";
+    item.innerHTML = `
+      <div class="item__title">${escapeHTML(a.title)}</div>
+      <div class="item__meta">${escapeHTML(a.when || "")}</div>
+    `;
+    item.addEventListener("click", () => openAnnouncement(a));
+    list.appendChild(item);
+  });
+}
+
+function openAnnouncement(a){
+  $("#announcementImg").src = a.image || "";
+  $("#announcementImg").alt = a.title || "Novedad";
+  $("#announcementTitle").textContent = a.title || "";
+  $("#announcementSubtitle").textContent = a.subtitle || "";
+  $("#announcementWhen").textContent = a.when ? `🗓 ${a.when}` : "";
+  $("#announcementWhere").textContent = a.where ? `📍 ${a.where}` : "";
+  $("#announcementDetails").textContent = a.details || "";
+  showView("announcementDetail");
+}
+
+/* -------------------- Wake Lock (pantalla encendida) -------------------- */
 async function toggleWakeLock(){
   try{
     if (!("wakeLock" in navigator)){
@@ -189,7 +252,7 @@ async function toggleWakeLock(){
   }
 }
 
-// PWA install button
+/* -------------------- PWA install -------------------- */
 let deferredPrompt = null;
 window.addEventListener("beforeinstallprompt", (e) => {
   e.preventDefault();
@@ -204,19 +267,19 @@ window.addEventListener("beforeinstallprompt", (e) => {
   }, { once: true });
 });
 
-// Service Worker
+/* -------------------- Service Worker -------------------- */
 if ("serviceWorker" in navigator){
   navigator.serviceWorker.register("sw.js").catch(()=>{});
 }
 
+/* -------------------- Init -------------------- */
 async function init(){
-  // Cargar data local
   state.songs = await loadJSON("data/songs.json");
   state.prayers = await loadJSON("data/prayers.json");
   state.saints = await loadJSON("data/saints.json");
   state.history = await loadJSON("data/history.json");
-  state.schedule = await loadJSON("data/history.json"); // por ahora mismo archivo, simple
-  // si querés separado, cambiamos a data/schedule.json
+  state.schedule = await loadJSON("data/schedule.json");
+  state.announcements = await loadJSON("data/announcements.json");
 
   renderCategoryChips();
   renderSongsList();
@@ -224,22 +287,29 @@ async function init(){
   renderSaints();
   renderHistory();
   renderSchedule();
+  renderAnnouncements();
 
-  // Eventos UI
+  // Navegación general
   $all("[data-nav]").forEach(btn => {
     btn.addEventListener("click", () => nav(btn.dataset.nav));
   });
+
+  // Botones "volver"
   $all("[data-back]").forEach(btn => {
-    btn.addEventListener("click", () => nav("home"));
+    const target = btn.getAttribute("data-back") || "home";
+    btn.addEventListener("click", () => showView(target));
   });
 
-  $("#btnBackToSongs").addEventListener("click", () => nav("songs"));
+  $("#btnBackToSongs").addEventListener("click", () => showView("songs"));
+  $("#btnBackToAnnouncements").addEventListener("click", () => showView("announcements"));
 
+  // Buscador
   $("#songSearch").addEventListener("input", (e) => {
     state.query = e.target.value;
     renderSongsList();
   });
 
+  // Fuente
   $("#fontMinus").addEventListener("click", () => {
     state.fontSize = Math.max(14, state.fontSize - 2);
     $("#songLyrics").style.fontSize = state.fontSize + "px";
@@ -254,5 +324,5 @@ async function init(){
 
 init().catch(err => {
   console.error(err);
-  alert("Error cargando datos. Revisá la carpeta /data y los JSON.");
+  alert("Error cargando datos. Revisá la carpeta /data y los archivos JSON.");
 });

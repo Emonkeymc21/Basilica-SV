@@ -1,0 +1,63 @@
+{
+  "updated_label": "Horarios Primavera / Verano",
+  "address": "Basílica San Vicente Ferrer · Lavalle 60 · Godoy Cruz · Mendoza",
+  "sections": [
+    {
+      "title": "Misas",
+      "items": [
+        {
+          "label": "Lunes a viernes",
+          "value": "8:00 hs"
+        },
+        {
+          "label": "Martes a viernes",
+          "value": "20:00 hs"
+        },
+        {
+          "label": "Sábados",
+          "value": "20:00 hs"
+        },
+        {
+          "label": "Domingos",
+          "value": "11:00 hs y 20:00 hs"
+        }
+      ]
+    },
+    {
+      "title": "Confesiones",
+      "items": [
+        {
+          "label": "Martes",
+          "value": "18:00 a 20:00 hs"
+        },
+        {
+          "label": "Viernes",
+          "value": "9:00 a 12:00 hs y 17:00 a 20:00 hs"
+        }
+      ]
+    },
+    {
+      "title": "Adoración Eucarística",
+      "items": [
+        {
+          "label": "Jueves",
+          "value": "18:00 a 19:30 hs"
+        },
+        {
+          "label": "Viernes",
+          "value": "8:30 a 10:00 hs"
+        }
+      ]
+    },
+    {
+      "title": "Secretaría",
+      "items": [
+        {
+          "label": "Martes a viernes",
+          "value": "9:00 a 12:00 hs y 17:00 a 20:00 hs"
+        }
+      ]
+    }
+  ],
+  "image": "assets/img/horarios-primavera-verano.png"
+}
