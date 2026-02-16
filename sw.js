@@ -1,4 +1,4 @@
-const CACHE = "san-vicente-v2";
+const CACHE = "san-vicente-v6";
 const ASSETS = [
   "./",
   "./index.html",
@@ -12,10 +12,14 @@ const ASSETS = [
   "./data/history.json",
   "./data/schedule.json",
   "./data/announcements.json",
+  "./data/events.json",
+  "./data/schedule_summer_2026.json",
+  "./data/saint_of_day.json",
 
   "./assets/img/logo.png",
   "./assets/img/curso-canto-gregoriano.png",
   "./assets/img/catequesis-familiar.png",
+  "./assets/img/hero-placeholder.jpg",
   "./assets/img/misa-enfermos.png",
   "./assets/img/horarios-primavera-verano.png",
 ];

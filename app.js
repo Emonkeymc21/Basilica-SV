@@ -569,3 +569,391 @@ init().catch(err => {
   console.error(err);
   alert("Error cargando datos. Revisá la carpeta /data y los archivos JSON.");
 });
+
+
+/* ================================
+   Overrides & additions (v6)
+==================================*/
+
+function _$(id){ return document.getElementById(id); }
+function _on(id, ev, fn){
+  const el = _$(id);
+  if(el) el.addEventListener(ev, fn);
+}
+
+function _fmtDateES(d){
+  try{
+    return d.toLocaleDateString('es-AR', { weekday:'long', year:'numeric', month:'long', day:'numeric' });
+  }catch(e){ return String(d); }
+}
+
+/** Build recurring schedule events (spring/summer) until Holy Week 2026 */
+function buildRecurringEvents(){
+  // Range: today -> 2026-03-28 (Saturday before Palm Sunday range)
+  const today = new Date();
+  const end = new Date('2026-03-28T23:59:59');
+  const start = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+  const events = [];
+  const pushEv = (dateObj, title, startTime, endTime, category='Horario')=>{
+    const [sh, sm] = startTime.split(':').map(n=>parseInt(n,10));
+    const s = new Date(dateObj.getFullYear(), dateObj.getMonth(), dateObj.getDate(), sh, sm, 0);
+    let e = null;
+    if(endTime){
+      const [eh, em] = endTime.split(':').map(n=>parseInt(n,10));
+      e = new Date(dateObj.getFullYear(), dateObj.getMonth(), dateObj.getDate(), eh, em, 0);
+    }
+    events.push({
+      id: `rec-${title}-${s.toISOString()}`,
+      title,
+      category,
+      start: s.toISOString(),
+      end: e ? e.toISOString() : null,
+      date: s.toISOString().slice(0,10)
+    });
+  };
+
+  for(let d = new Date(start); d <= end; d.setDate(d.getDate()+1)){
+    const dow = d.getDay(); // 0 Sun .. 6 Sat
+    // Masses
+    if(dow>=1 && dow<=5){ // Mon-Fri
+      pushEv(d, 'Misa', '08:00', null, 'Misa');
+    }
+    if(dow>=2 && dow<=5){ // Tue-Fri
+      pushEv(d, 'Misa', '20:00', null, 'Misa');
+    }
+    if(dow===6){ // Sat
+      pushEv(d, 'Misa', '20:00', null, 'Misa');
+    }
+    if(dow===0){ // Sun
+      pushEv(d, 'Misa', '11:00', null, 'Misa');
+      pushEv(d, 'Misa', '20:00', null, 'Misa');
+    }
+
+    // Confessions
+    if(dow===2){ // Tue
+      pushEv(d, 'Confesiones', '18:00', '20:00', 'Confesiones');
+    }
+    if(dow===5){ // Fri
+      pushEv(d, 'Confesiones', '09:00', '12:00', 'Confesiones');
+      pushEv(d, 'Confesiones', '17:00', '20:00', 'Confesiones');
+    }
+
+    // Adoration
+    if(dow===4){ // Thu
+      pushEv(d, 'Adoración Eucarística', '18:00', '19:30', 'Adoración');
+    }
+    if(dow===5){ // Fri
+      pushEv(d, 'Adoración Eucarística', '08:30', '10:00', 'Adoración');
+    }
+  }
+  return events;
+}
+
+function getAllEvents(){
+  const base = Array.isArray(state.events) ? state.events : [];
+  const recurring = buildRecurringEvents();
+  // Normalize base events to include date/start fields for consistent rendering
+  const normalized = base.map(ev=>{
+    if(ev.date) return ev;
+    if(ev.start){
+      return { ...ev, date: ev.start.slice(0,10) };
+    }
+    return ev;
+  });
+  // Merge
+  return [...normalized, ...recurring].sort((a,b)=>{
+    const as = (a.start || (a.date ? a.date+'T00:00:00' : '9999-12-31T00:00:00'));
+    const bs = (b.start || (b.date ? b.date+'T00:00:00' : '9999-12-31T00:00:00'));
+    return as.localeCompare(bs);
+  });
+}
+
+function renderCalendar(){
+  const picker = _$('calendarDatePicker');
+  const dayBox = _$('calendarDayEvents');
+  const nextBox = _$('calendarNextEvents');
+  if(!picker || !dayBox || !nextBox) return;
+
+  const all = getAllEvents();
+
+  // init picker default today
+  if(!picker.value){
+    const t = new Date();
+    picker.value = t.toISOString().slice(0,10);
+  }
+
+  const renderDay = ()=>{
+    const ymd = picker.value;
+    dayBox.innerHTML = '';
+    const items = all.filter(ev => (ev.date === ymd));
+    if(items.length===0){
+      dayBox.innerHTML = '<div class="muted">No hay eventos cargados para este día.</div>';
+      return;
+    }
+    items.forEach(ev=>{
+      const start = ev.start ? new Date(ev.start) : null;
+      const time = start ? start.toLocaleTimeString('es-AR', {hour:'2-digit', minute:'2-digit'}) : '';
+      const el = document.createElement('div');
+      el.className = 'listitem';
+      el.innerHTML = `<div class="listitem__title">${ev.title}</div>
+                      <div class="muted small">${time} ${ev.category ? '· '+ev.category : ''}</div>`;
+      dayBox.appendChild(el);
+    });
+  };
+
+  const renderNext = ()=>{
+    nextBox.innerHTML = '';
+    const now = new Date();
+    const end = new Date(now); end.setDate(end.getDate()+14);
+    const items = all.filter(ev=>{
+      const s = ev.start ? new Date(ev.start) : (ev.date ? new Date(ev.date+'T00:00:00') : null);
+      return s && s >= new Date(now.toDateString()) && s <= end;
+    }).slice(0,80);
+
+    if(items.length===0){
+      nextBox.innerHTML = '<div class="muted">Sin eventos próximos.</div>';
+      return;
+    }
+
+    let currentDate = '';
+    items.forEach(ev=>{
+      const s = ev.start ? new Date(ev.start) : new Date(ev.date+'T00:00:00');
+      const ymd = s.toISOString().slice(0,10);
+      if(ymd !== currentDate){
+        currentDate = ymd;
+        const h = document.createElement('div');
+        h.className = 'listheader';
+        h.textContent = _fmtDateES(s);
+        nextBox.appendChild(h);
+      }
+      const time = ev.start ? s.toLocaleTimeString('es-AR', {hour:'2-digit', minute:'2-digit'}) : '';
+      const el = document.createElement('div');
+      el.className = 'listitem';
+      el.innerHTML = `<div class="listitem__title">${ev.title}</div>
+                      <div class="muted small">${time} ${ev.category ? '· '+ev.category : ''}</div>`;
+      nextBox.appendChild(el);
+    });
+  };
+
+  renderDay();
+  renderNext();
+  picker.onchange = ()=>{ renderDay(); };
+
+  // update teaser boxes
+  const homeNext = _$('homeNextEvents');
+  const todayNext = _$('todayNextEvents');
+  const nextFew = getAllEvents().filter(ev=>{
+    const s = ev.start ? new Date(ev.start) : (ev.date ? new Date(ev.date+'T00:00:00') : null);
+    return s && s >= new Date(new Date().toDateString());
+  }).slice(0,6);
+  const line = nextFew.map(ev=>{
+    const s = ev.start ? new Date(ev.start) : new Date(ev.date+'T00:00:00');
+    const d = s.toLocaleDateString('es-AR', {day:'2-digit', month:'2-digit'});
+    const t = ev.start ? s.toLocaleTimeString('es-AR',{hour:'2-digit',minute:'2-digit'}) : '';
+    return `${d} ${t} · ${ev.title}`;
+  }).join('<br>');
+  if(homeNext) homeNext.innerHTML = line || 'Sin eventos próximos.';
+  if(todayNext) todayNext.innerHTML = line || 'Sin eventos próximos.';
+}
+
+async function updateSaintOfDay(){
+  const titleEls = [_$('saintTitle'), _$('saintTitle2')].filter(Boolean);
+  const bioEls = [_$('saintBio'), _$('saintBio2')].filter(Boolean);
+  const linkEls = [_$('saintLink'), _$('saintLink2'), _$('homeSaintLink')].filter(Boolean);
+  const teaserEl = _$('homeSaintTeaser');
+  const imgWrap = _$('saintImageWrap');
+  const imgEl = _$('saintImage');
+
+  const setLoading = (txt)=>{
+    titleEls.forEach(el=>el.textContent = 'Santo del día');
+    bioEls.forEach(el=>el.textContent = txt);
+    if(teaserEl) teaserEl.textContent = txt;
+  };
+
+  setLoading('Cargando…');
+
+  const fallbackLocal = async ()=>{
+    try{
+      const r = await fetch('data/saint_of_day.json', {cache:'no-store'});
+      if(!r.ok) throw new Error('no local');
+      const data = await r.json();
+      const title = data.name || 'Santo del día';
+      const bio = data.summary || 'Abrí la página para ver el santo del día.';
+      const url = data.url || 'https://www.vaticannews.va/es/santos.html';
+      titleEls.forEach(el=>el.textContent = title);
+      bioEls.forEach(el=>el.textContent = bio);
+      if(teaserEl) teaserEl.textContent = title;
+      linkEls.forEach(el=>{ el.href = url; el.textContent = el.id==='homeSaintLink' ? 'Abrir' : 'Abrir biografía'; });
+      if(data.image && imgWrap && imgEl){
+        imgEl.src = data.image;
+        imgWrap.hidden = false;
+      }else if(imgWrap){
+        imgWrap.hidden = true;
+      }
+      return true;
+    }catch(e){
+      return false;
+    }
+  };
+
+  try{
+    // Use existing proxy if available
+    const proxy = 'https://r.jina.ai/http://www.vaticannews.va/es/santos.html';
+    const r = await fetch(proxy, { cache: 'no-store' });
+    if(!r.ok) throw new Error('Fetch error');
+    const html = await r.text();
+
+    // very forgiving parsing
+    const nameMatch = html.match(/<h1[^>]*>([^<]{3,120})<\/h1>/i) || html.match(/<title>([^<]{3,120})<\/title>/i);
+    let name = (nameMatch ? nameMatch[1] : 'Santo del día').replace(/\s+/g,' ').trim();
+    name = name.replace(/\s*\|\s*Vatican News\s*/i,'').trim();
+
+    // Get first link to santo page if present
+    let url = 'https://www.vaticannews.va/es/santos.html';
+    const hrefMatch = html.match(/href="(\/es\/santos\/[^"]+\.html)"/i);
+    if(hrefMatch) url = 'https://www.vaticannews.va' + hrefMatch[1];
+
+    titleEls.forEach(el=>el.textContent = name);
+    bioEls.forEach(el=>el.textContent = 'Tocá “Abrir” para ver la biografía completa.');
+    if(teaserEl) teaserEl.textContent = name;
+    linkEls.forEach(el=>{ el.href = url; el.textContent = el.id==='homeSaintLink' ? 'Abrir' : 'Abrir biografía'; });
+
+    // Images from Vatican often block; we leave for later
+    if(imgWrap) imgWrap.hidden = true;
+
+  }catch(err){
+    // Fallback local json, else link only
+    const ok = await fallbackLocal();
+    if(!ok){
+      setLoading('No se pudo cargar. Tocá para abrir en Vatican News.');
+      linkEls.forEach(el=>{ el.href = 'https://www.vaticannews.va/es/santos.html'; el.textContent = el.id==='homeSaintLink' ? 'Abrir' : 'Abrir'; });
+      if(imgWrap) imgWrap.hidden = true;
+    }
+  }
+}
+
+function renderSongbooks(){
+  // Keep existing select behavior if present, but also render chips.
+  const select = _$('songbookSelect');
+  const chips = _$('songbookChips');
+  const songbooks = (state.songbooks || []).map(s=>s.name).filter(Boolean);
+  if(select){
+    select.innerHTML = '';
+    songbooks.forEach(name=>{
+      const o = document.createElement('option');
+      o.value = name; o.textContent = name;
+      select.appendChild(o);
+    });
+    if(!state.currentSongbook && songbooks.length) state.currentSongbook = songbooks[0];
+    select.value = state.currentSongbook || '';
+    select.onchange = ()=>{ state.currentSongbook = select.value; renderSongsList(); };
+  }
+  if(chips){
+    chips.innerHTML = '';
+    songbooks.forEach(name=>{
+      const b = document.createElement('button');
+      b.className = 'chip' + ((state.currentSongbook===name)?' chip--active':'');
+      b.type='button';
+      b.textContent = name;
+      b.onclick = ()=>{
+        state.currentSongbook = name;
+        if(select) select.value = name;
+        renderSongbooks();
+        renderSongsList();
+      };
+      chips.appendChild(b);
+    });
+  }
+}
+
+function setupScrollTop(){
+  const btn = _$('scrollTopBtn');
+  if(!btn) return;
+  const toggle = ()=>{
+    if(window.scrollY > 320) btn.classList.add('scrolltop--show');
+    else btn.classList.remove('scrolltop--show');
+  };
+  window.addEventListener('scroll', toggle, {passive:true});
+  toggle();
+  btn.addEventListener('click', ()=>window.scrollTo({top:0, behavior:'smooth'}));
+}
+
+function renderSchedule(){
+  const m = _$('scheduleMass');
+  const c = _$('scheduleConfessions');
+  const a = _$('scheduleAdoration');
+  const o = _$('scheduleOffice');
+  if(!m||!c||!a||!o) return;
+  m.innerHTML = `
+    Lunes a viernes: 8 hs.<br>
+    Martes a viernes: 20 hs.<br>
+    Sábados: 20 hs.<br>
+    Domingos: 11 y 20 hs.
+  `;
+  c.innerHTML = `
+    Martes: de 18 a 20 hs.<br>
+    Viernes: de 9 a 12 hs.<br>
+    y de 17 a 20 hs.
+  `;
+  a.innerHTML = `
+    Jueves: de 18 a 19.30 hs.<br>
+    Viernes: de 8.30 a 10 hs.
+  `;
+  o.innerHTML = `
+    Martes a viernes:<br>
+    9 a 12 hs.<br>
+    y de 17 a 20 hs.
+  `;
+}
+
+function init(){
+  // NAV
+  document.querySelectorAll('[data-nav]').forEach(btn=>{
+    btn.addEventListener('click', (e)=>{
+      const key = btn.getAttribute('data-nav');
+      showView(key);
+      if(btn.tagName.toLowerCase()==='a' && btn.getAttribute('href')?.startsWith('#')) e.preventDefault();
+    });
+  });
+
+  // Today date
+  const todayDate = _$('todayDate');
+  if(todayDate) todayDate.textContent = _fmtDateES(new Date());
+
+  // Back buttons
+  _on('btnBackToSongs','click',()=>showView('songs'));
+  _on('btnBackToAnnouncements','click',()=>showView('announcements'));
+  _on('btnBackToPrayers','click',()=>showView('prayers'));
+
+  // Search + select existing handlers
+  _on('songSearch','input',()=>renderSongsList());
+
+  // Font controls song reader
+  const applyFont = (targetId, delta)=>{
+    const el=_$(targetId);
+    if(!el) return;
+    const cur = parseFloat(getComputedStyle(el).fontSize) || 16;
+    el.style.fontSize = Math.max(14, Math.min(28, cur+delta)) + 'px';
+  };
+  _on('fontMinus','click',()=>applyFont('songLyrics',-1));
+  _on('fontPlus','click',()=>applyFont('songLyrics',+1));
+  _on('fontMinus2','click',()=>applyFont('prayerBody',-1));
+  _on('fontPlus2','click',()=>applyFont('prayerBody',+1));
+
+  setupScrollTop();
+
+  // Load data and render
+  loadData().then(()=>{
+    renderSchedule();
+    renderSongbooks();
+    renderSongsList();
+    renderAnnouncements();
+    renderPrayers();
+    renderHistory();
+    renderSaints();
+    renderCalendar();
+    updateSaintOfDay();
+  }).catch((err)=>{
+    console.error(err);
+  });
+}
