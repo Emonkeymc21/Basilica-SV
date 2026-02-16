@@ -1,0 +1,37 @@
+[
+  {
+    "id": "all",
+    "title": "Todos los cancioneros",
+    "description": "Búsqueda general (para cuando quieras encontrar una canción rápido)."
+  },
+  {
+    "id": "misa_dom_11",
+    "title": "Misa Domingo 11 hs",
+    "description": "Selección para la Misa dominical de las 11."
+  },
+  {
+    "id": "misa_20",
+    "title": "Misa 20 hs",
+    "description": "Selección para la Misa de las 20."
+  },
+  {
+    "id": "pascua",
+    "title": "Misa de Pascua",
+    "description": "Cantos propios de la Vigilia / Domingo de Pascua."
+  },
+  {
+    "id": "jueves_santo",
+    "title": "Jueves Santo",
+    "description": "Cantos y respuestas del Jueves Santo."
+  },
+  {
+    "id": "viernes_santo",
+    "title": "Viernes Santo",
+    "description": "Cantos propios del Viernes Santo."
+  },
+  {
+    "id": "sabado_gloria",
+    "title": "Sábado de Gloria",
+    "description": "Vigilia Pascual (Sábado de Gloria)."
+  }
+]

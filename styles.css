@@ -313,64 +313,92 @@ body{
 }
 
 
-/* -------------------- Hoy -------------------- */
-.today{display:flex; flex-direction:column; gap:12px}
-.today__date{font-weight:900; color:var(--muted); margin:2px 2px 6px}
-.today__card{
-  border:1px solid var(--border);
-  background: rgba(255,255,255,.92);
-  border-radius: var(--radius);
-  padding:14px;
-  box-shadow: var(--shadow);
+/* Top navigation strip (scrollable) */
+.navstrip{
+  position: sticky;
+  top: 64px; /* below topbar */
+  z-index: 10;
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 10px 14px;
+  background: rgba(243,247,255,.92);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--border);
 }
-.today__label{font-size:12px; font-weight:900; letter-spacing:.2px; color:var(--muted)}
-.today__title{margin-top:6px; font-size:18px; font-weight:900}
-.today__actions{display:flex; gap:10px; align-items:center; margin-top:10px; flex-wrap:wrap}
-.today__hint{margin-top:10px; font-size:12px; color:var(--muted)}
-.today__text{margin-top:8px; font-size:16px; line-height:1.35}
+.navstrip::-webkit-scrollbar{height:8px}
+.navstrip__item{
+  white-space: nowrap;
+  border: 1px solid var(--border);
+  background: var(--card);
+  color: var(--text);
+  padding: 8px 12px;
+  border-radius: 999px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.navstrip__item.is-active{
+  background: var(--blue);
+  color: white;
+  border-color: transparent;
+}
 
-/* -------------------- Calendario -------------------- */
-.calendar{display:flex; flex-direction:column; gap:12px}
+/* Songbooks selector */
+.select{
+  width: 100%;
+  padding: 12px 12px;
+  border-radius: 14px;
+  border: 1px solid var(--border);
+  background: white;
+  color: var(--text);
+  font-size: 16px;
+}
+.songbooks{margin: 10px 0 0 0}
+
+/* Santo del día block */
+.saintoday{
+  display:flex;
+  gap:12px;
+  align-items:center;
+  text-decoration:none;
+  color:inherit;
+}
+.saintoday__img{
+  width: 74px;
+  height: 74px;
+  object-fit: cover;
+  border-radius: 14px;
+  border: 1px solid var(--border);
+  flex: 0 0 auto;
+}
+.saintoday__name{font-size: 18px; font-weight: 900;}
+.saintoday__hint{font-size: 13px; color: var(--muted); margin-top: 4px;}
+.kicker{font-size:12px; letter-spacing:.08em; text-transform: uppercase; color: var(--muted); font-weight: 800; margin-bottom: 8px;}
+.card--pad{padding: 14px}
+
+/* Calendar */
 .calendar__head{
-  display:flex; align-items:center; justify-content:space-between;
-  border:1px solid var(--border);
-  background: rgba(255,255,255,.92);
-  border-radius: var(--radius);
-  padding:10px;
-  box-shadow: var(--shadow);
+  display:flex;
+  align-items:center;
+  justify-content: space-between;
+  gap: 10px;
 }
-.calendar__month{font-weight:900}
-.calendar__toggle{display:flex; gap:10px; flex-wrap:wrap}
-.calendar__event{
-  border:1px solid var(--border);
-  background: rgba(255,255,255,.92);
-  border-radius: var(--radius);
-  padding:12px;
-  box-shadow: var(--shadow);
-  margin-bottom:10px;
-}
-.calendar__eventTitle{font-weight:900}
-.calendar__eventMeta{font-size:12px; color:var(--muted); margin-top:4px}
-.calendar__eventDetails{margin-top:8px; font-size:14px; color:var(--text); white-space:pre-wrap}
-
-.calendar__monthgrid{
+.calendar__title{font-weight: 900; font-size: 18px}
+.calendar__grid{
+  margin-top: 10px;
   display:grid;
   grid-template-columns: repeat(7, 1fr);
-  gap:8px;
+  gap: 8px;
 }
-.daycell{
-  border:1px solid var(--border);
-  background: rgba(255,255,255,.92);
+.calcell{
+  border: 1px solid var(--border);
+  background: var(--card);
   border-radius: 14px;
-  padding:10px 8px;
-  min-height:56px;
-  box-shadow: var(--shadow);
+  padding: 10px 8px;
+  min-height: 46px;
+  cursor: pointer;
 }
-.daycell__n{font-weight:900; font-size:12px}
-.daycell__dots{margin-top:6px; display:flex; gap:4px; flex-wrap:wrap}
-.dot{width:8px;height:8px;border-radius:999px;background:rgba(30,99,182,.85)}
-.dot--gold{background:rgba(214,178,94,.95)}
-
-@media (max-width: 380px){
-  .tab{font-size:11px; padding:10px 6px; margin:0 4px}
-}
+.calcell__n{font-weight: 900;}
+.calcell.is-today{outline: 2px solid var(--blue)}
+.calcell.has-event{box-shadow: 0 0 0 2px rgba(214,178,94,.45) inset}
+.list--compact .item{padding: 10px 12px}

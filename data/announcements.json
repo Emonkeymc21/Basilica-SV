@@ -25,41 +25,5 @@
     "where": "Basílica San Vicente Ferrer · Lavalle 60 · Godoy Cruz",
     "image": "assets/img/misa-enfermos.png",
     "details": "Te esperamos para rezar juntos."
-  },
-  {
-    "id": "dedicacion-letran",
-    "title": "Dedicación a la Basílica San Juan de Letrán",
-    "subtitle": "9 de noviembre",
-    "when": "9 de noviembre",
-    "where": "Iglesia universal · Efeméride",
-    "image": "assets/img/flyer-dedicacion-san-juan-letran.jpg",
-    "details": "Efeméride litúrgica.\n\"Cada uno de nosotros es un templo del Espíritu Santo\" (San Pablo)."
-  },
-  {
-    "id": "nuestra-senora-salud",
-    "title": "Nuestra Señora de la Salud",
-    "subtitle": "21 de noviembre",
-    "when": "21 de noviembre",
-    "where": "Devoción mariana",
-    "image": "assets/img/flyer-nuestra-senora-salud.jpg",
-    "details": "\"Oh Santísima Virgen María, salud de los enfermos, acoge nuestros sufrimientos y únelos a los de Él\"."
-  },
-  {
-    "id": "cristo-rey",
-    "title": "Solemnidad de Cristo Rey",
-    "subtitle": "23 de noviembre",
-    "when": "23 de noviembre",
-    "where": "Solemnidad",
-    "image": "assets/img/flyer-cristo-rey.jpg",
-    "details": "\"Yo soy Rey. Para esto nací, para esto vine al mundo, para ser testigo de la Verdad\" (Jn 18, 36-37)."
-  },
-  {
-    "id": "solo-por-hoy",
-    "title": "Sólo por hoy…",
-    "subtitle": "Decálogo de la serenidad (Papa Juan XXIII)",
-    "when": "Para rezar y practicar día a día",
-    "where": "Reflexión",
-    "image": "assets/img/solo-por-hoy-cover.jpg",
-    "details": "Un pequeño camino diario para vivir con serenidad.\nAbrí el detalle para leer los puntos."
   }
 ]

@@ -1,4 +1,26 @@
 {
-  "title": "Nuestra historia",
-  "text": "Basílica San Vicente Ferrer (Godoy Cruz, Mendoza)\n\n(Completá acá la historia de la parroquia: fundación, patrono, hitos, comunidades, fotos, etc.)\n\nSi querés, puedo armarlo en formato línea de tiempo (año → evento) y dejarlo bien prolijo para el sitio."
+  "title": "Basílica San Vicente Ferrer",
+  "subtitle": "Godoy Cruz, Mendoza",
+  "sections": [
+    {
+      "heading": "Reseña histórica",
+      "body": "La Basílica San Vicente Ferrer es uno de los templos más emblemáticos de Godoy Cruz. Sus orígenes se vinculan a una larga tradición religiosa local que se remonta a las primeras capillas y oratorios del área (siglos XVIII–XIX), hasta consolidarse como parroquia y, más tarde, como basílica."
+    },
+    {
+      "heading": "Antecedentes",
+      "body": "Entre los antecedentes más mencionados aparecen un oratorio en el siglo XVIII y el posterior crecimiento pastoral de la zona. Con el paso del tiempo, la comunidad fue ampliando espacios y organización, acompañando el desarrollo del departamento."
+    },
+    {
+      "heading": "El templo actual (1906–1912)",
+      "body": "La construcción del templo actual comenzó en 1906 y fue concluida en 1912. Se destaca su estilo neogótico, con nave central elevada, vitrales y una fachada característica sobre calle Lavalle."
+    },
+    {
+      "heading": "Arte sacro y reformas",
+      "body": "A lo largo del siglo XX y XXI se registran distintas mejoras y restauraciones: intervenciones tras el terremoto de 1985, trabajos de conservación, y puesta en valor de elementos artísticos (retablos, imágenes y ornamentación)."
+    },
+    {
+      "heading": "Hoy",
+      "body": "La basílica continúa siendo un centro espiritual y comunitario, con celebraciones litúrgicas, acciones pastorales y una intensa vida parroquial."
+    }
+  ]
 }

@@ -20,7 +20,19 @@
       </div>
     </div>
     <button class="btn btn--ghost" id="btnInstall" hidden>Instalar</button>
-  </header>
+  
+    <nav class="navstrip" aria-label="Navegación principal">
+      <button class="navstrip__item" data-nav="home">Inicio</button>
+      <button class="navstrip__item" data-nav="today">Hoy</button>
+      <button class="navstrip__item" data-nav="calendar">Calendario</button>
+      <button class="navstrip__item" data-nav="songs">Cancioneros</button>
+      <button class="navstrip__item" data-nav="schedule">Horarios</button>
+      <button class="navstrip__item" data-nav="announcements">Novedades</button>
+      <button class="navstrip__item" data-nav="prayers">Oraciones</button>
+      <button class="navstrip__item" data-nav="saints">Santos</button>
+      <button class="navstrip__item" data-nav="history">Historia</button>
+    </nav>
+</header>
 
   <main class="container">
     <!-- HOME -->
@@ -30,9 +42,61 @@
         <div class="hero__meta">Cantos · Oraciones · Santos · Horarios · Novedades</div>
       </section>
 
+
+    <!-- TODAY -->
+    <section id="viewToday" class="view">
+      <div class="toolbar">
+        <button class="btn btn--ghost" data-back="home">←</button>
+        <div class="toolbar__title">Hoy</div>
+      </div>
+
+      <div class="card card--pad">
+        <div class="kicker">Santo del día</div>
+        <a id="saintOfDayLink" class="saintoday" href="#" target="_blank" rel="noreferrer">
+          <img id="saintOfDayImg" class="saintoday__img" src="assets/img/logo.png" alt="Imagen del santo del día" />
+          <div class="saintoday__meta">
+            <div id="saintOfDayName" class="saintoday__name">Cargando…</div>
+            <div class="saintoday__hint">Tocá para abrir la página oficial</div>
+          </div>
+        </a>
+      </div>
+
+      <div class="card card--pad">
+        <div class="kicker">Frase / propósito</div>
+        <div class="muted">Podés usar esta sección para “Sólo por hoy…”, intención del día, o una cita corta.</div>
+      </div>
+    </section>
+
+
+    <!-- CALENDAR -->
+    <section id="viewCalendar" class="view">
+      <div class="toolbar">
+        <button class="btn btn--ghost" data-back="home">←</button>
+        <div class="toolbar__title">Calendario</div>
+      </div>
+
+      <div class="calendar">
+        <div class="calendar__head">
+          <button class="btn btn--ghost" id="calPrev">←</button>
+          <div class="calendar__title" id="calTitle">Mes</div>
+          <button class="btn btn--ghost" id="calNext">→</button>
+        </div>
+        <div class="calendar__grid" id="calGrid"></div>
+
+        <div class="card card--pad" style="margin-top:12px">
+          <div class="kicker">Eventos</div>
+          <div id="calEvents" class="list list--compact"></div>
+        </div>
+      </div>
+    </section>
+
+
+
+
+
       <div class="grid">
         <button class="card" data-nav="songs">
-          <div class="card__title">Cancionero</div>
+          <div class="card__title">Cancioneros</div>
           <div class="card__desc">Buscar por título o por letra</div>
         </button>
 
@@ -41,18 +105,7 @@
           <div class="card__desc">Misas · Confesiones · Adoración · Secretaría</div>
         </button>
 
-        
-        <button class="card" data-nav="today">
-          <div class="card__title">Hoy</div>
-          <div class="card__desc">Santo del día y frase</div>
-        </button>
-
-        <button class="card" data-nav="calendar">
-          <div class="card__title">Calendario</div>
-          <div class="card__desc">Agenda de actividades</div>
-        </button>
-
-<button class="card" data-nav="announcements">
+        <button class="card" data-nav="announcements">
           <div class="card__title">Novedades</div>
           <div class="card__desc">Cursos, catequesis y avisos</div>
         </button>
@@ -113,7 +166,13 @@
     <section id="viewSongs" class="view">
       <div class="toolbar">
         <button class="btn btn--ghost" data-back="home">←</button>
-        <div class="toolbar__title">Cancionero</div>
+        <div class="toolbar__title">Cancioneros</div>
+      </div>
+
+      <div class="songbooks">
+        <div class="kicker">Elegí un cancionero</div>
+        <select id="songbookSelect" class="select"></select>
+        <div id="songbookHint" class="muted" style="margin-top:6px"></div>
       </div>
 
       <div class="search">
@@ -169,60 +228,6 @@
       <div class="panel" id="historyPanel"></div>
     </section>
 
-
-    <!-- TODAY --> 
-    <section id="viewToday" class="view">
-      <div class="toolbar">
-        <button class="btn btn--ghost" data-back="home">←</button>
-        <div class="toolbar__title">Hoy</div>
-      </div>
-
-      <div class="today">
-        <div class="today__date" id="todayDate"></div>
-
-        <div class="today__card">
-          <div class="today__label">Santo del día</div>
-          <div class="today__title" id="todaySaintTitle">Cargando…</div>
-          <div class="today__actions">
-            <a class="btn btn--primary" id="todaySaintLink" href="#" target="_blank" rel="noopener">Ver</a>
-            <button class="btn" id="btnReloadToday">Actualizar</button>
-          </div>
-          <div class="today__hint" id="todaySaintHint"></div>
-        </div>
-
-        <div class="today__card">
-          <div class="today__label">Sólo por hoy…</div>
-          <div class="today__text" id="todayReflection">
-            Un paso simple: elegí una cosa buena para hacer hoy 🙌
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- CALENDAR -->
-    <section id="viewCalendar" class="view">
-      <div class="toolbar">
-        <button class="btn btn--ghost" data-back="home">←</button>
-        <div class="toolbar__title">Calendario</div>
-      </div>
-
-      <div class="calendar">
-        <div class="calendar__head">
-          <button class="btn btn--ghost" id="calPrev">◀</button>
-          <div class="calendar__month" id="calMonthLabel"></div>
-          <button class="btn btn--ghost" id="calNext">▶</button>
-        </div>
-
-        <div class="calendar__toggle">
-          <button class="chip chip--active" id="btnAgenda">Agenda</button>
-          <button class="chip" id="btnMonth">Mes</button>
-        </div>
-
-        <div id="calendarAgenda"></div>
-        <div id="calendarMonth" class="calendar__monthgrid" hidden></div>
-      </div>
-    </section>
-
     <!-- SCHEDULE -->
     <section id="viewSchedule" class="view">
       <div class="toolbar">
@@ -236,9 +241,8 @@
 
   <footer class="bottombar">
     <button class="tab" data-nav="home">Inicio</button>
-    <button class="tab" data-nav="today">Hoy</button>
     <button class="tab" data-nav="songs">Cantos</button>
-    <button class="tab" data-nav="calendar">Calendario</button>
+    <button class="tab" data-nav="announcements">Novedades</button>
     <button class="tab" data-nav="schedule">Horarios</button>
   </footer>
 
